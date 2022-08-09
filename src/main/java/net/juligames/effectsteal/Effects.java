@@ -1,6 +1,7 @@
 package net.juligames.effectsteal;
 
 import org.bukkit.potion.PotionEffectType;
+import org.checkerframework.checker.units.qual.Speed;
 import org.jetbrains.annotations.NotNull;
 
 public interface Effects {
@@ -15,6 +16,8 @@ public interface Effects {
 }
 
 enum GoodEffects implements Effects{
+    SPEED(PotionEffectType.SPEED,1),
+    SPEED_2(PotionEffectType.SPEED,2,new Effects[]{SPEED})
     ;
 
     private final PotionEffectType type;
@@ -53,7 +56,8 @@ enum GoodEffects implements Effects{
 }
 
 enum BadEffects implements Effects{
-
+    SLOWNESS(PotionEffectType.SLOW,1),
+    SLOWNESS_2(PotionEffectType.SLOW,2,new Effects[]{SLOWNESS})
     ;
     private final PotionEffectType type;
     private final int level;
