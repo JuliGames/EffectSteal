@@ -1,20 +1,63 @@
 package net.juligames.effectsteal;
 
+import de.bentzin.tools.Shuffle;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Random;
 
 public interface MyEffect {
 
     @NotNull PotionEffectType getType();
     int getLevel();
     @NotNull MyEffect[] getDependencies();
+    MyEffect[] getMyEffects();
 
     default boolean hasDependencies() {
         return getDependencies().length != 0;
     }
 
-    default MyEffect getOneRandom(MyEffect[] current) {
+    /**
+     *
+     * @param current
+     * @return null - if no new effect can be found...
+     */
+   @Nullable
+   default MyEffect getOneNewRandom(@NotNull MyEffect[] current) {
+        MyEffect[] myEffects = getMyEffects();
+        Shuffle.shuffleArray(myEffects);
+        
+        for (MyEffect myEffect : myEffects) {
+            boolean contains = false;
+            for (MyEffect effect : current) {
+                if(effect.equals(myEffect)) contains = true;
+            }
+            if(contains)
+                continue;
+            //myEffect is not in current -> check for depends
+            if(!myEffect.hasDependencies()) return myEffect;
+            //okey there are depends
 
+
+            @NotNull MyEffect[] dependencies = myEffect.getDependencies();
+            boolean next = false;
+
+            for (MyEffect dependency : dependencies) {
+                boolean b = false;
+                for (MyEffect effect : current) {
+                    if(effect.equals(dependency)) b = true;
+                }
+                if(!b) {
+                    next = true; break; //exit for() and search a new one
+                }
+            }
+            if(next) continue;
+            //All depends are there!! wowo
+            return myEffect;
+        }
+        //No result!
+        return null;
     }
 }
 
@@ -51,6 +94,11 @@ enum GoodMyEffect implements MyEffect {
     @Override
     public MyEffect[] getDependencies() {
         return dependencies;
+    }
+
+    @Override
+    public MyEffect[] getMyEffects() {
+        return values();
     }
 
     @Override
@@ -97,5 +145,10 @@ enum BadMyEffect implements MyEffect {
     @Override
     public PotionEffectType getType() {
         return type;
+    }
+
+    @Override
+    public MyEffect[] getMyEffects() {
+        return values();
     }
 }
