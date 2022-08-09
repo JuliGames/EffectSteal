@@ -1,8 +1,12 @@
 package net.juligames.effectsteal;
 
 import net.juligames.effectsteal.util.EffectMap;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.logging.Level;
 
@@ -16,6 +20,9 @@ public final class EffectSteal extends JavaPlugin {
          get().getLogger().log(Level.INFO,s);
     }
 
+    public static boolean hasPluginOpPermissions(@NotNull CommandSender subject) {
+        return subject.hasPermission("effectsteal.operator") || subject.isOp();
+    }
 
     private final EffectMap effectMap = new EffectMap();
 
