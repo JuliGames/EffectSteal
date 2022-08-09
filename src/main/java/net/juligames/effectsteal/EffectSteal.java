@@ -47,4 +47,11 @@ public final class EffectSteal extends JavaPlugin {
         return effectMap;
     }
 
+    public void reportKill(Player killer, Player victim) {
+        getEffectMap().prepare(killer, victim);
+
+        getEffectMap().minus(victim.getUniqueId());
+        getEffectMap().plus(killer.getUniqueId());
+    }
+
 }
