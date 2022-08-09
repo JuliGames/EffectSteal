@@ -11,11 +11,19 @@ public final class EffectMap extends HashMap<UUID,EffectArrayList> {
 
 
     public void plus(UUID uuid) {
+        int calculateValue = calculateValue(uuid);
 
     }
 
     public void minus(UUID uuid) {
+        int calculateValue = calculateValue(uuid);
+        EffectArrayList effectArrayList = get(uuid);
 
+        if(calculateValue >= 1) {
+            effectArrayList.remove(effectArrayList.getOneRandom());
+        } else if( calculateValue <= 0) {
+            effectArrayList.add()
+        }
     }
 
 

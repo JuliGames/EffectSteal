@@ -3,7 +3,7 @@ package net.juligames.effectsteal.util;
 import de.bentzin.tools.SubscribableList;
 import net.juligames.effectsteal.Calcable;
 import net.juligames.effectsteal.EffectSteal;
-import net.juligames.effectsteal.MyEffect;
+import net.juligames.effectsteal.effect.MyEffect;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -58,6 +58,10 @@ public class EffectArrayList extends SubscribableList<MyEffect> {
         return i;
     }
 
+
+    public MyEffect getOneRandom() {
+        return null;
+    }
 
     //TODO: Pick one random
 }
