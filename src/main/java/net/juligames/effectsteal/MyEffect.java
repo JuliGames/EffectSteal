@@ -3,39 +3,43 @@ package net.juligames.effectsteal;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
-public interface Effects {
+public interface MyEffect {
 
     @NotNull PotionEffectType getType();
     int getLevel();
-    @NotNull Effects[] getDependencies();
+    @NotNull MyEffect[] getDependencies();
 
     default boolean hasDependencies() {
         return getDependencies().length != 0;
     }
+
+    default MyEffect getOneRandom(MyEffect[] current) {
+
+    }
 }
 
-enum GoodEffects implements Effects{
+enum GoodMyEffect implements MyEffect {
     SPEED(PotionEffectType.SPEED,1),
-    SPEED_2(PotionEffectType.SPEED,2,new Effects[]{SPEED})
+    SPEED_2(PotionEffectType.SPEED,2,new MyEffect[]{SPEED}),
     ;
 
 
     private final PotionEffectType type;
     private final int level;
-    private final Effects[] dependencies;
+    private final MyEffect[] dependencies;
 
-    GoodEffects(PotionEffectType type, int level, Effects[] dependencies) {
+    GoodMyEffect(PotionEffectType type, int level, MyEffect[] dependencies) {
 
         this.type = type;
         this.level = level;
         this.dependencies = dependencies;
     }
 
-    GoodEffects(PotionEffectType type, int level) {
+    GoodMyEffect(PotionEffectType type, int level) {
 
         this.type = type;
         this.level = level;
-        this.dependencies = new Effects[0];
+        this.dependencies = new MyEffect[0];
     }
 
     @Override
@@ -45,7 +49,7 @@ enum GoodEffects implements Effects{
 
     @NotNull
     @Override
-    public Effects[] getDependencies() {
+    public MyEffect[] getDependencies() {
         return dependencies;
     }
 
@@ -55,28 +59,28 @@ enum GoodEffects implements Effects{
     }
 }
 
-enum BadEffects implements Effects{
+enum BadMyEffect implements MyEffect {
     SLOWNESS(PotionEffectType.SLOW,1),
-    SLOWNESS_2(PotionEffectType.SLOW,2,new Effects[]{SLOWNESS})
+    SLOWNESS_2(PotionEffectType.SLOW,2,new MyEffect[]{SLOWNESS})
     ;
 
 
     private final PotionEffectType type;
     private final int level;
-    private final Effects[] dependencies;
+    private final MyEffect[] dependencies;
 
-    BadEffects(PotionEffectType type, int level, Effects[] dependencies) {
+    BadMyEffect(PotionEffectType type, int level, MyEffect[] dependencies) {
 
         this.type = type;
         this.level = level;
         this.dependencies = dependencies;
     }
 
-    BadEffects(PotionEffectType type, int level) {
+    BadMyEffect(PotionEffectType type, int level) {
 
         this.type = type;
         this.level = level;
-        this.dependencies = new Effects[0];
+        this.dependencies = new MyEffect[0];
     }
 
     @Override
@@ -86,7 +90,7 @@ enum BadEffects implements Effects{
 
     @NotNull
     @Override
-    public Effects[] getDependencies() {
+    public MyEffect[] getDependencies() {
         return dependencies;
     }
 
