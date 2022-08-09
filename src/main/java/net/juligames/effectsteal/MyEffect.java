@@ -173,9 +173,25 @@ enum BadMyEffect implements MyEffect {
     public EffectType getEffectType() {
         return EffectType.BAD;
     }
+
+    public void test() {return;}
 }
 
-enum EffectType {
-    GOOD,
-    BAD;
+enum EffectType implements Calcable {
+    GOOD(1),
+    NEUTRAL(0),
+    UNKNOWN (0),
+    BAD(-1);
+    private final int calc;
+
+    @Override
+    public void calc(int value) {
+        value = value + calc;
+    }
+
+    EffectType(int calc){
+        this.calc = calc;
+    }
+
+
 }
