@@ -16,6 +16,8 @@ public interface MyEffect {
     @NotNull MyEffect[] getDependencies();
     MyEffect[] getMyEffects();
 
+    EffectType getEffectType();
+
     default boolean hasDependencies() {
         return getDependencies().length != 0;
     }
@@ -23,7 +25,7 @@ public interface MyEffect {
     default void grant(@NotNull Player player) {
         player.addPotionEffect(new PotionEffect(getType(),Integer.MAX_VALUE,getLevel()));
     }
-    
+
     default void revoke(@NotNull Player player) {
         player.removePotionEffect(getType());
     }
@@ -112,6 +114,11 @@ enum GoodMyEffect implements MyEffect {
     }
 
     @Override
+    public EffectType getEffectType() {
+        return EffectType.GOOD;
+    }
+
+    @Override
     public PotionEffectType getType() {
         return type;
     }
@@ -161,4 +168,14 @@ enum BadMyEffect implements MyEffect {
     public MyEffect[] getMyEffects() {
         return values();
     }
+
+    @Override
+    public EffectType getEffectType() {
+        return EffectType.BAD;
+    }
+}
+
+enum EffectType {
+    GOOD,
+    BAD;
 }
