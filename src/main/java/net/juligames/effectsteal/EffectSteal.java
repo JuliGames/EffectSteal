@@ -3,7 +3,6 @@ package net.juligames.effectsteal;
 import net.juligames.effectsteal.util.EffectMap;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
-import org.checkerframework.common.initializedfields.qual.EnsuresInitializedFields;
 
 import java.util.logging.Level;
 
@@ -14,7 +13,7 @@ public final class EffectSteal extends JavaPlugin {
 
     public static void log(String s) {
         if(get() == null) System.out.println(s); else
-        get().getLogger().log(Level.INFO,s);
+         get().getLogger().log(Level.INFO,s);
     }
 
 
@@ -27,6 +26,7 @@ public final class EffectSteal extends JavaPlugin {
     public void onEnable() {
         plugin = this;
         // Plugin startup logic
+        log("Hello World!");
         EffectStealListener effectStealListener = new EffectStealListener(this);
 
     }
