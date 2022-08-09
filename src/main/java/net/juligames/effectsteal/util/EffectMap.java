@@ -18,6 +18,11 @@ public final class EffectMap extends HashMap<UUID,EffectArrayList> {
 
     }
 
+
+    protected int calculateValue(UUID uuid) {
+        return get(uuid).calculateValue();
+    }
+
     /**
      *
      * @param uuid
