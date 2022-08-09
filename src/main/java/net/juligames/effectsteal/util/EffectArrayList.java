@@ -4,8 +4,7 @@ import de.bentzin.tools.SubscribableList;
 import net.juligames.effectsteal.EffectSteal;
 import net.juligames.effectsteal.MyEffect;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 
 import java.security.InvalidParameterException;
 
@@ -22,11 +21,12 @@ public class EffectArrayList extends SubscribableList<MyEffect> {
         }
 
         subscribe((effect, subscriptionType) -> {
-            grantEffect(type);
+            grantEffect(effect);
         },SubscriptionType.ADD);
+
         subscribe((effect, subscriptionType) -> {
-            revokeEffect(type);
-        },SubscriptionType.REMOVE)
+            revokeEffect(effect);
+        },SubscriptionType.REMOVE);
     }
 
     /**
@@ -36,12 +36,16 @@ public class EffectArrayList extends SubscribableList<MyEffect> {
         clear();
     }
 
-    private void grantEffect(MyEffect effect) {
-        player.addPotionEffect(new PotionEffect())
+    private void grantEffect(@NotNull MyEffect effect) {
+        if(player.isOnline())
+          effect.grant(player);
+        else reset();
     }
 
     private void revokeEffect(MyEffect effect) {
-
+        if(player.isOnline())
+            effect.revoke(player);
+        else reset();
     }
 
     //TODO: Pick one random

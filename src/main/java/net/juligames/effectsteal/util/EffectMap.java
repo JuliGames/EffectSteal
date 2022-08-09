@@ -1,6 +1,8 @@
 package net.juligames.effectsteal.util;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -23,6 +25,14 @@ public final class EffectMap extends HashMap<UUID,EffectArrayList> {
      */
     public EffectArrayList create(UUID uuid) {
         return put(uuid, new EffectArrayList(Bukkit.getPlayer(uuid)));
+    }
+
+    public boolean prepare(@NotNull Player player) {
+        UUID uniqueId = player.getUniqueId();
+        if(containsKey(uniqueId))
+            return true;
+        create(uniqueId);
+        return false;
     }
 
     /**
