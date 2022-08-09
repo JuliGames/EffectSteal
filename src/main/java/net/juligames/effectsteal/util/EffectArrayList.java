@@ -1,12 +1,48 @@
 package net.juligames.effectsteal.util;
 
 import de.bentzin.tools.SubscribableList;
+import net.juligames.effectsteal.EffectSteal;
+import net.juligames.effectsteal.MyEffect;
+import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.ArrayList;
+import java.security.InvalidParameterException;
 
 
-public class EffectArrayList extends SubscribableList<PotionEffectType> {
+public class EffectArrayList extends SubscribableList<MyEffect> {
+
+    private final Player player;
+
+    public EffectArrayList(Player player) {
+        this.player = player;
+        if(player == null) {
+            EffectSteal.get().getLogger().warning("Somebody tried to create an EffectArrayList for a player that is currently offline!");
+            throw new InvalidParameterException("the player should not be null!");
+        }
+
+        subscribe((effect, subscriptionType) -> {
+            grantEffect(type);
+        },SubscriptionType.ADD);
+        subscribe((effect, subscriptionType) -> {
+            revokeEffect(type);
+        },SubscriptionType.REMOVE)
+    }
+
+    /**
+     * brings all players "value" to 0
+     */
+    public void reset() {
+        clear();
+    }
+
+    private void grantEffect(MyEffect effect) {
+        player.addPotionEffect(new PotionEffect())
+    }
+
+    private void revokeEffect(MyEffect effect) {
+
+    }
 
     //TODO: Pick one random
 }
