@@ -1,6 +1,8 @@
 package net.juligames.effectsteal;
 
 import de.bentzin.tools.Shuffle;
+import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -16,6 +18,14 @@ public interface MyEffect {
 
     default boolean hasDependencies() {
         return getDependencies().length != 0;
+    }
+
+    default void grant(@NotNull Player player) {
+        player.addPotionEffect(new PotionEffect(getType(),Integer.MAX_VALUE,getLevel()));
+    }
+    
+    default void revoke(@NotNull Player player) {
+        player.removePotionEffect(getType());
     }
 
     /**
