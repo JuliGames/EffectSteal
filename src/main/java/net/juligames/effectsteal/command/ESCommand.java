@@ -38,5 +38,7 @@ public class ESCommand implements CommandExecutor {
             sender.sendMessage(descriptionFile.getFullName() + " by " + descriptionFile.getAuthors().get(0));
             //IMPORTANT: If author is added you need to build a dynamic way to display multiple authors
         }
+
+        return true;
     }
 }
