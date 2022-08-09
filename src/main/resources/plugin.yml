@@ -1,0 +1,5 @@
+name: Effectsteal
+version: '${project.version}'
+main: net.juligames.effectsteal.Effectsteal
+api-version: 1.18
+author: TDR
