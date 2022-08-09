@@ -127,5 +127,13 @@ public class SubscribableList<E> extends ArrayList<E> {
             this.subscriptions = subscriptions;
         }
     }
+
+    @Override
+    public void clear() {
+        for (E e : this) {
+            removal(e);
+        }
+        super.clear();
+    }
 }
 
