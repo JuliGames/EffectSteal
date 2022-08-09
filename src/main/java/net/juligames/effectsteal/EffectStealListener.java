@@ -19,7 +19,8 @@ public final class EffectStealListener implements Listener {
         Player killer = player.getKiller();
         if(killer == null) return;
         EffectSteal.log(player.getName() + " was killed by " + killer);
-        
+
+        EffectSteal.get().reportKill(killer,player);
     }
 
 
