@@ -4,8 +4,8 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 public enum BadMyEffect implements MyEffect {
-    SLOWNESS(PotionEffectType.SLOW, 1),
-    SLOWNESS_2(PotionEffectType.SLOW, 2, new MyEffect[]{SLOWNESS});
+    SLOWNESS(PotionEffectType.SLOW, 0),
+    SLOWNESS_2(PotionEffectType.SLOW, 1, new MyEffect[]{SLOWNESS});
 
 
     private final PotionEffectType type;

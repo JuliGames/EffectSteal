@@ -4,8 +4,8 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 public enum GoodMyEffect implements MyEffect {
-    SPEED(PotionEffectType.SPEED, 1),
-    SPEED_2(PotionEffectType.SPEED, 2, new MyEffect[]{SPEED}),
+    SPEED(PotionEffectType.SPEED, 0),
+    SPEED_2(PotionEffectType.SPEED, 1, new MyEffect[]{SPEED}),
     ;
 
 

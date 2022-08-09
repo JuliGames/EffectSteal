@@ -10,8 +10,8 @@ public enum EffectType implements Calcable {
     private final int calc;
 
     @Override
-    public void calc(int value) {
-        value = value + calc;
+    public int calc(int value) {
+        return value + calc;
     }
 
     EffectType(int calc) {

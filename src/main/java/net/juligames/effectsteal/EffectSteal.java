@@ -1,13 +1,16 @@
 package net.juligames.effectsteal;
 
 import net.juligames.effectsteal.util.EffectMap;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.jetbrains.annotations.NotNull;
 
+import java.sql.BatchUpdateException;
 import java.util.logging.Level;
 
 public final class EffectSteal extends JavaPlugin {
@@ -41,6 +44,13 @@ public final class EffectSteal extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+
+        //failsave for debug
+        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+            for (PotionEffect activePotionEffect : onlinePlayer.getActivePotionEffects()) {
+                onlinePlayer.removePotionEffect(activePotionEffect.getType());
+            }
+        }
     }
 
     public EffectMap getEffectMap() {

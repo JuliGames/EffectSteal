@@ -1,5 +1,9 @@
 package net.juligames.effectsteal.util;
 
+import net.juligames.effectsteal.effect.BadMyEffect;
+import net.juligames.effectsteal.effect.EffectType;
+import net.juligames.effectsteal.effect.GoodMyEffect;
+import net.juligames.effectsteal.effect.MyEffect;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -12,7 +16,13 @@ public final class EffectMap extends HashMap<UUID,EffectArrayList> {
 
     public void plus(UUID uuid) {
         int calculateValue = calculateValue(uuid);
+        EffectArrayList effectArrayList = get(uuid);
 
+        if(calculateValue <= -1) {
+            effectArrayList.remove(effectArrayList.getOneRandom(EffectType.BAD));
+        } else if( calculateValue >= 0) {
+            effectArrayList.add(GoodMyEffect.values()[0].getOneNewRandom(effectArrayList.toArray(new MyEffect[0])));
+        }
     }
 
     public void minus(UUID uuid) {
@@ -20,9 +30,9 @@ public final class EffectMap extends HashMap<UUID,EffectArrayList> {
         EffectArrayList effectArrayList = get(uuid);
 
         if(calculateValue >= 1) {
-            effectArrayList.remove(effectArrayList.getOneRandom());
+            effectArrayList.remove(effectArrayList.getOneRandom(EffectType.GOOD));
         } else if( calculateValue <= 0) {
-            effectArrayList.add()
+            effectArrayList.add(BadMyEffect.values()[0].getOneNewRandom(effectArrayList.toArray(new MyEffect[0])));
         }
     }
 
