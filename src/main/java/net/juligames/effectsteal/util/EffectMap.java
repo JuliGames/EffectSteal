@@ -35,6 +35,12 @@ public final class EffectMap extends HashMap<UUID,EffectArrayList> {
         return false;
     }
 
+    public void prepare(@NotNull Player @NotNull ... players){
+        for (Player player : players) {
+            prepare(player);
+        }
+    }
+
     /**
      * ! This does not clear the Map
      * @see EffectMap#clear()
