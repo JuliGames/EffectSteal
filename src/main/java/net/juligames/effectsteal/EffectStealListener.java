@@ -56,6 +56,11 @@ public final class EffectStealListener implements Listener {
             Player player = (Player) entity;
 
             EffectArrayList myEffects = EffectSteal.get().getEffectMap().get(player.getUniqueId());
+            if(myEffects == null) {
+                event.setCancelled(true);
+                return;
+            }
+
             if(event.getAction().equals(EntityPotionEffectEvent.Action.ADDED)) {
                 event.setCancelled(myEffects.hasEffect(event.getNewEffect()));
             }
