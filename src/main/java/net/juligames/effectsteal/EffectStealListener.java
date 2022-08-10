@@ -35,7 +35,6 @@ public final class EffectStealListener implements Listener {
         }
         EffectSteal.log(player.getName() + " was killed by " + killer);
         EffectSteal.get().reportKill(killer,player);
-        player.sendMessage(ChatColor.GRAY + player.getActivePotionEffects().toString());
         emap.put(player.getUniqueId(),player.getActivePotionEffects());
     }
 
@@ -43,13 +42,9 @@ public final class EffectStealListener implements Listener {
     public void onRespawn(@NotNull PlayerPostRespawnEvent respawnEvent) {
         Player player = respawnEvent.getPlayer();
         Collection<PotionEffect> effects = emap.get(player.getUniqueId());
-        player.sendMessage(ChatColor.BLUE + effects.toString());
-        effects.forEach(potionEffect -> potionEffect.withDuration(Integer.MAX_VALUE));
-        if(effects != null && effects.size() != 0){
-            for (PotionEffect effect : effects) {
-                EffectSteal.log(player.getName() + " - " + effect.getType() + "/" + effect.getAmplifier() + player.addPotionEffect(effect));
-            }
-        }
+        if(effects != null && effects.size() != 0)
+           player.addPotionEffects(effects);
+
 
     }
 
