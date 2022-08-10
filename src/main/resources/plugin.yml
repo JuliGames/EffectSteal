@@ -3,3 +3,7 @@ version: '${project.version}'
 main: net.juligames.effectsteal.EffectSteal
 api-version: 1.18
 author: TDR
+commands:
+  es:
+    description: Command for EffectSteal
+    usage: /es

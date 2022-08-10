@@ -1,5 +1,6 @@
 package net.juligames.effectsteal;
 
+import net.juligames.effectsteal.command.ESCommand;
 import net.juligames.effectsteal.util.EffectMap;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -35,6 +36,7 @@ public final class EffectSteal extends JavaPlugin {
         plugin = this;
         // Plugin startup logic
         log("Hello World!");
+        getCommand("es").setExecutor(new ESCommand());
         EffectStealListener effectStealListener = new EffectStealListener(this);
 
     }
