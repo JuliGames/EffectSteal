@@ -6,7 +6,7 @@
 
     <groupId>net.juligames</groupId>
     <artifactId>effectsteal</artifactId>
-    <version>v.0.3-alpha</version>
+    <version>0.3-alpha</version>
     <packaging>jar</packaging>
 
     <name>EffectSteal</name>

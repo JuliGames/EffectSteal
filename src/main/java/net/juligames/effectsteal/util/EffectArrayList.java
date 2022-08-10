@@ -3,17 +3,23 @@ package net.juligames.effectsteal.util;
 import de.bentzin.tools.SubscribableList;
 import net.juligames.effectsteal.Calcable;
 import net.juligames.effectsteal.EffectSteal;
+import net.juligames.effectsteal.effect.BadMyEffect;
 import net.juligames.effectsteal.effect.EffectType;
+import net.juligames.effectsteal.effect.GoodMyEffect;
 import net.juligames.effectsteal.effect.MyEffect;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.security.InvalidParameterException;
+import java.util.ArrayDeque;
+import java.util.Collection;
 import java.util.Random;
 
 
@@ -67,6 +73,13 @@ public class EffectArrayList extends SubscribableList<MyEffect> {
             player.sendActionBar(component);
         }
         else reset();
+    }
+
+    public boolean hasEffect(PotionEffect effect) {
+        Collection<MyEffect> myEffects = new ArrayDeque<>();
+        myEffects.addAll(BadMyEffect.search(effect));
+        myEffects.addAll(GoodMyEffect.search(effect));
+        return myEffects.size() > 0;
     }
 
     public int calculateValue() {

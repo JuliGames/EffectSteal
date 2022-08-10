@@ -1,11 +1,14 @@
 package net.juligames.effectsteal;
 
 import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
+import net.juligames.effectsteal.util.EffectArrayList;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.potion.PotionEffect;
@@ -44,8 +47,27 @@ public final class EffectStealListener implements Listener {
         Collection<PotionEffect> effects = emap.get(player.getUniqueId());
         if(effects != null && effects.size() != 0)
            player.addPotionEffects(effects);
+    }
 
+    @EventHandler
+    public void onEffect(@NotNull EntityPotionEffectEvent event) {
+        Entity entity = event.getEntity();
+        if(entity instanceof Player){
+            Player player = (Player) entity;
 
+            EffectArrayList myEffects = EffectSteal.get().getEffectMap().get(player.getUniqueId());
+            if(event.getAction().equals(EntityPotionEffectEvent.Action.ADDED)) {
+                event.setCancelled(myEffects.hasEffect(event.getNewEffect()));
+            }
+            else if(event.getAction().equals(EntityPotionEffectEvent.Action.REMOVED)
+                    || event.getAction().equals(EntityPotionEffectEvent.Action.CLEARED)) {
+
+                event.setCancelled(!myEffects.hasEffect(event.getOldEffect()));
+            }
+            else if (event.getAction().equals(EntityPotionEffectEvent.Action.CHANGED)) {
+                event.setCancelled(!myEffects.hasEffect(event.getNewEffect()));
+            }
+        }else return;
     }
 
 

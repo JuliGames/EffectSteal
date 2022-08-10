@@ -1,7 +1,11 @@
 package net.juligames.effectsteal.effect;
 
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 public enum BadMyEffect implements MyEffect {
     SLOWNESS(PotionEffectType.SLOW, 0),
@@ -58,5 +62,15 @@ public enum BadMyEffect implements MyEffect {
     @Override
     public EffectType getEffectType() {
         return EffectType.BAD;
+    }
+
+    public static @NotNull Collection<BadMyEffect> search(PotionEffect potionEffect) {
+        Collection<BadMyEffect> collection = new ArrayList<>();
+        for (BadMyEffect value : values()) {
+            if(value.getType().equals(potionEffect.getType()) && value.getLevel() == potionEffect.getAmplifier()) {
+                collection.add(value);
+            }
+        }
+        return collection;
     }
 }
