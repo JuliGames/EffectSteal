@@ -9,7 +9,7 @@
     <version>v.0.3-alpha</version>
     <packaging>jar</packaging>
 
-    <name>Effectsteal</name>
+    <name>EffectSteal</name>
 
     <properties>
         <java.version>1.8</java.version>

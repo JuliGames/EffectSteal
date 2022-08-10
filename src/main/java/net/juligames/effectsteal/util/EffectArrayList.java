@@ -49,7 +49,7 @@ public class EffectArrayList extends SubscribableList<MyEffect> {
         if (player.isOnline()) {
             effect.grant(player);
             Color color = effect.getType().getColor();
-            TextComponent component = Component.text(effect.getType().getName() + ", " + effect.getLevel() + " was added!")
+            TextComponent component = Component.text(effect.getType().getName() + ", " + (effect.getLevel() + 1) + " was added!")
                     .color(TextColor.color(color.getRed(), color.getGreen(), color.getBlue()));
             player.sendMessage(component);
             player.sendActionBar(component);
@@ -61,7 +61,7 @@ public class EffectArrayList extends SubscribableList<MyEffect> {
         if (player.isOnline()) {
             effect.revoke(player);
             Color color = effect.getType().getColor();
-            TextComponent component = Component.text(effect.getType().getName() + ", " + effect.getLevel() + " was removed!")
+            TextComponent component = Component.text(effect.getType().getName() + ", " + (effect.getLevel() + 1) + " was removed!")
                     .color(TextColor.color(color.getRed(), color.getGreen(), color.getBlue()));
             player.sendMessage(component);
             player.sendActionBar(component);

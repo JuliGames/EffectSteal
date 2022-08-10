@@ -1,7 +1,10 @@
 package net.juligames.effectsteal;
 
+import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -32,13 +35,22 @@ public final class EffectStealListener implements Listener {
         }
         EffectSteal.log(player.getName() + " was killed by " + killer);
         EffectSteal.get().reportKill(killer,player);
+        player.sendMessage(ChatColor.GRAY + player.getActivePotionEffects().toString());
         emap.put(player.getUniqueId(),player.getActivePotionEffects());
     }
 
-    @EventHandler
-    public void onRespawn(@NotNull PlayerRespawnEvent respawnEvent) {
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onRespawn(@NotNull PlayerPostRespawnEvent respawnEvent) {
         Player player = respawnEvent.getPlayer();
-        player.addPotionEffects(emap.get(player.getUniqueId()));
+        Collection<PotionEffect> effects = emap.get(player.getUniqueId());
+        player.sendMessage(ChatColor.BLUE + effects.toString());
+        effects.forEach(potionEffect -> potionEffect.withDuration(Integer.MAX_VALUE));
+        if(effects != null && effects.size() != 0){
+            for (PotionEffect effect : effects) {
+                EffectSteal.log(player.getName() + " - " + effect.getType() + "/" + effect.getAmplifier() + player.addPotionEffect(effect));
+            }
+        }
+
     }
 
 
