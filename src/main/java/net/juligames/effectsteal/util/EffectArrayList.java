@@ -6,6 +6,7 @@ import net.juligames.effectsteal.EffectSteal;
 import net.juligames.effectsteal.effect.EffectType;
 import net.juligames.effectsteal.effect.MyEffect;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
@@ -48,8 +49,10 @@ public class EffectArrayList extends SubscribableList<MyEffect> {
         if (player.isOnline()) {
             effect.grant(player);
             Color color = effect.getType().getColor();
-            player.sendMessage(Component.text(effect.getType().getName() + ", " + effect.getLevel() + " was added!")
-                    .color(TextColor.color(color.getRed(),color.getGreen(),color.getBlue())));
+            TextComponent component = Component.text(effect.getType().getName() + ", " + effect.getLevel() + " was added!")
+                    .color(TextColor.color(color.getRed(), color.getGreen(), color.getBlue()));
+            player.sendMessage(component);
+            player.sendActionBar(component);
         }
         else reset();
     }
@@ -58,8 +61,10 @@ public class EffectArrayList extends SubscribableList<MyEffect> {
         if (player.isOnline()) {
             effect.revoke(player);
             Color color = effect.getType().getColor();
-            player.sendMessage(Component.text(effect.getType().getName() + ", " + effect.getLevel() + " was removed!")
-                    .color(TextColor.color(color.getRed(),color.getGreen(),color.getBlue())));
+            TextComponent component = Component.text(effect.getType().getName() + ", " + effect.getLevel() + " was removed!")
+                    .color(TextColor.color(color.getRed(), color.getGreen(), color.getBlue()));
+            player.sendMessage(component);
+            player.sendActionBar(component);
         }
         else reset();
     }
