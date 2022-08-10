@@ -8,10 +8,11 @@ public enum BadMyEffect implements MyEffect {
     SLOWNESS_2(PotionEffectType.SLOW, 1, SLOWNESS),
 
     WEAKNESS(PotionEffectType.WEAKNESS,0),
-
-
-
-
+    SLOW_DIGGING(PotionEffectType.SLOW_DIGGING, 0),
+    HUNGER(PotionEffectType.HUNGER,0),
+    UNLUCKY(PotionEffectType.UNLUCK,0),
+    SLOW_FALLING(PotionEffectType.SLOW_FALLING,1, GoodMyEffect.SLOW_FALLING),
+    BAD_OMEN(PotionEffectType.BAD_OMEN,0),
     ;
 
 

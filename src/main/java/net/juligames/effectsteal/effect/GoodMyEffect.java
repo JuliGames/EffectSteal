@@ -11,8 +11,26 @@ public enum GoodMyEffect implements MyEffect {
     JUMP_BOOST_2(PotionEffectType.JUMP,1,JUMP_BOOST),
 
     RESISTANCE(PotionEffectType.DAMAGE_RESISTANCE,0),
+    RESISTANCE_2(PotionEffectType.DAMAGE_RESISTANCE,1,RESISTANCE),
+
+    HASTE(PotionEffectType.FAST_DIGGING,0),
+    HASTE_2(PotionEffectType.FAST_DIGGING,1,HASTE),
+
+    REGENERATION(PotionEffectType.REGENERATION,0),
+    REGENERATION_2(PotionEffectType.REGENERATION,1,REGENERATION),
+
+    WATER_BREATHING(PotionEffectType.WATER_BREATHING,0),
+    NIGHT_VISION(PotionEffectType.NIGHT_VISION,0),
+    HEALTH(PotionEffectType.HEALTH_BOOST,0),
+    LUCK(PotionEffectType.LUCK,0),
+
+    SLOW_FALLING(PotionEffectType.SLOW_FALLING,0),
+
+    CONDUIT_POWER(PotionEffectType.CONDUIT_POWER,0),
+    DOLPHINS_GRACE(PotionEffectType.DOLPHINS_GRACE,0),
+    HERO(PotionEffectType.HERO_OF_THE_VILLAGE,0),
+
     FIRE_RESISTANCE(PotionEffectType.FIRE_RESISTANCE,0),
-    ABSORPTION(PotionEffectType.ABSORPTION,0),
     STRENGTH(PotionEffectType.INCREASE_DAMAGE, 0),
 
     ;
