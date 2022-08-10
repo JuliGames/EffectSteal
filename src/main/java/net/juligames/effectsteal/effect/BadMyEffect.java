@@ -46,7 +46,7 @@ public enum BadMyEffect implements MyEffect {
     }
 
     @Override
-    public PotionEffectType getType() {
+    public @NotNull PotionEffectType getType() {
         return type;
     }
 
@@ -58,9 +58,5 @@ public enum BadMyEffect implements MyEffect {
     @Override
     public EffectType getEffectType() {
         return EffectType.BAD;
-    }
-
-    public void test() {
-        return;
     }
 }
