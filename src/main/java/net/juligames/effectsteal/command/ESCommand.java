@@ -28,6 +28,7 @@ public class ESCommand implements CommandExecutor {
                     String a = args[0];
                     if (a.equalsIgnoreCase("reset")){
                         EffectSteal.get().getEffectMap().reset();
+                        sender.sendMessage("All effects removed!");
                     }
                 }
             } else {
