@@ -5,14 +5,21 @@ import org.jetbrains.annotations.NotNull;
 
 public enum BadMyEffect implements MyEffect {
     SLOWNESS(PotionEffectType.SLOW, 0),
-    SLOWNESS_2(PotionEffectType.SLOW, 1, new MyEffect[]{SLOWNESS});
+    SLOWNESS_2(PotionEffectType.SLOW, 1, SLOWNESS),
+
+    WEAKNESS(PotionEffectType.WEAKNESS,0),
+
+
+
+
+    ;
 
 
     private final PotionEffectType type;
     private final int level;
     private final MyEffect[] dependencies;
 
-    BadMyEffect(PotionEffectType type, int level, MyEffect[] dependencies) {
+    BadMyEffect(PotionEffectType type, int level, MyEffect... dependencies) {
 
         this.type = type;
         this.level = level;

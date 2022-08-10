@@ -5,7 +5,16 @@ import org.jetbrains.annotations.NotNull;
 
 public enum GoodMyEffect implements MyEffect {
     SPEED(PotionEffectType.SPEED, 0),
-    SPEED_2(PotionEffectType.SPEED, 1, new MyEffect[]{SPEED}),
+    SPEED_2(PotionEffectType.SPEED, 1, SPEED),
+
+    JUMP_BOOST(PotionEffectType.JUMP,0),
+    JUMP_BOOST_2(PotionEffectType.JUMP,1,JUMP_BOOST),
+
+    RESISTANCE(PotionEffectType.DAMAGE_RESISTANCE,0),
+    FIRE_RESISTANCE(PotionEffectType.FIRE_RESISTANCE,0),
+    ABSORPTION(PotionEffectType.ABSORPTION,0),
+    STRENGTH(PotionEffectType.INCREASE_DAMAGE, 0),
+
     ;
 
 
@@ -13,8 +22,7 @@ public enum GoodMyEffect implements MyEffect {
     private final int level;
     private final MyEffect[] dependencies;
 
-    GoodMyEffect(PotionEffectType type, int level, MyEffect[] dependencies) {
-
+    GoodMyEffect(PotionEffectType type, int level, MyEffect... dependencies) {
         this.type = type;
         this.level = level;
         this.dependencies = dependencies;
