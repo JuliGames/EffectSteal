@@ -3,21 +3,22 @@ package net.juligames.effectsteal;
 import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
 import net.juligames.effectsteal.util.EffectArrayList;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.potion.PotionEffect;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public final class EffectStealListener implements Listener {
 
@@ -72,14 +73,31 @@ public final class EffectStealListener implements Listener {
             else if (event.getAction().equals(EntityPotionEffectEvent.Action.CHANGED)) {
                 event.setCancelled(!myEffects.hasEffect(event.getNewEffect()));
             }
-            if(event.isCancelled()) {
-                if(event.getNewEffect().getType() != null)
+         /*   if(event.isCancelled()) {
+                if(event.getNewEffect() != null)
                     EffectSteal.log("Blocked effect: " + event.getNewEffect().getType().getName() + " on " + event.getEntity().getName());
                 else
                     EffectSteal.log("Blocked removal of effect: " + event.getOldEffect().getType().getName() + " on " + event.getEntity().getName());
 
             }
+
+          */
         }else return;
+    }
+
+
+    @Contract(pure = true)
+    @EventHandler
+    public void onMilk(@NotNull PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+
+        if(event.getMaterial().equals(Material.MILK_BUCKET)) {
+            if(event.getAction().equals(Action.RIGHT_CLICK_BLOCK)
+                    || event.getAction().equals(Action.RIGHT_CLICK_AIR)){
+                event.setCancelled(true);
+            }
+        }
+
     }
 
 
