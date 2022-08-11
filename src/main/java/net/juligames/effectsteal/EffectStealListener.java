@@ -62,13 +62,11 @@ public final class EffectStealListener implements Listener {
             }
 
             if(event.getAction().equals(EntityPotionEffectEvent.Action.ADDED)) {
-                event.setCancelled(myEffects.hasEffect(event.getNewEffect()));
                 event.setCancelled(!myEffects.hasEffect(event.getNewEffect()));
             }
             else if(event.getAction().equals(EntityPotionEffectEvent.Action.REMOVED)
                     || event.getAction().equals(EntityPotionEffectEvent.Action.CLEARED)) {
 
-                event.setCancelled(!myEffects.hasEffect(event.getOldEffect()));
                 event.setCancelled(myEffects.hasEffect(event.getOldEffect()));
             }
             else if (event.getAction().equals(EntityPotionEffectEvent.Action.CHANGED)) {
