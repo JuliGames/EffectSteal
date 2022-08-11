@@ -1,5 +1,6 @@
 package net.juligames.effectsteal.effect;
 
+import org.bukkit.Sound;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -72,5 +73,15 @@ public enum BadMyEffect implements MyEffect {
             }
         }
         return collection;
+    }
+
+    @Override
+    public Sound additionSound() {
+        return Sound.ENTITY_ENDER_DRAGON_GROWL;
+    }
+
+    @Override
+    public Sound removalSound() {
+        return Sound.ENTITY_EXPERIENCE_ORB_PICKUP;
     }
 }

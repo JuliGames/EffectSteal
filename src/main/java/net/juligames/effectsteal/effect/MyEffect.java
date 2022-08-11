@@ -2,6 +2,7 @@ package net.juligames.effectsteal.effect;
 
 import de.bentzin.tools.Shuffle;
 import net.juligames.effectsteal.Calcable;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -23,10 +24,21 @@ public interface MyEffect {
 
     default void grant(@NotNull Player player) {
         player.addPotionEffect(new PotionEffect(getType(),Integer.MAX_VALUE,getLevel()));
+        player.playSound(player.getLocation(),additionSound(),100,0);
     }
 
     default void revoke(@NotNull Player player) {
-        player.removePotionEffect(getType());
+        player.removePotionEffect(getType());//TODO removes every effect
+        player.playSound(player.getLocation(),removalSound(),100,0);
+    }
+
+
+    default Sound additionSound() {
+       return Sound.UI_BUTTON_CLICK;
+    }
+
+    default Sound removalSound() {
+        return Sound.UI_BUTTON_CLICK;
     }
 
     /**
@@ -37,12 +49,19 @@ public interface MyEffect {
    @Nullable
    default MyEffect getOneNewRandom(@NotNull MyEffect[] current) {
         MyEffect[] myEffects = getMyEffects();
+        if(myEffects.length == 0) return null;
         Shuffle.shuffleArray(myEffects);
         
         for (MyEffect myEffect : myEffects) {
             boolean contains = false;
             for (MyEffect effect : current) {
-                if(effect.equals(myEffect)) contains = true;
+                if(effect == null){
+                    return null;
+                }
+                if (effect.equals(myEffect)) {
+                    contains = true;
+                    break;
+                }
             }
             if(contains)
                 continue;

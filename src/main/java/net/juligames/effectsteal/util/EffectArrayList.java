@@ -3,12 +3,10 @@ package net.juligames.effectsteal.util;
 import de.bentzin.tools.SubscribableList;
 import net.juligames.effectsteal.Calcable;
 import net.juligames.effectsteal.EffectSteal;
-import net.juligames.effectsteal.effect.BadMyEffect;
-import net.juligames.effectsteal.effect.EffectType;
-import net.juligames.effectsteal.effect.GoodMyEffect;
-import net.juligames.effectsteal.effect.MyEffect;
+import net.juligames.effectsteal.effect.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
@@ -35,11 +33,17 @@ public class EffectArrayList extends SubscribableList<MyEffect> {
         }
 
         subscribe((effect, subscriptionType) -> {
-            grantEffect(effect);
+            if(effect != null)
+                grantEffect(effect);
+            else
+                grantEffect(new UnknownEffect());
         }, SubscriptionType.ADD);
 
         subscribe((effect, subscriptionType) -> {
-            revokeEffect(effect);
+            if(effect != null)
+             revokeEffect(effect);
+            else
+                grantEffect(new UnknownEffect());
         }, SubscriptionType.REMOVE);
 
     }
@@ -51,8 +55,18 @@ public class EffectArrayList extends SubscribableList<MyEffect> {
         clear();
     }
 
+
+
     private void grantEffect(@NotNull MyEffect effect) {
         if (player.isOnline()) {
+            effect.additionSound();
+            if(effect.getEffectType().equals(EffectType.UNKNOWN)) {
+
+                TextComponent component = Component.text("There was no effect found, that could be applied to you!")
+                        .color(NamedTextColor.RED);
+                player.sendMessage(component);
+              return;
+            }
             effect.grant(player);
             Color color = effect.getType().getColor();
             TextComponent component = Component.text(effect.getType().getName() + ", " + (effect.getLevel() + 1) + " was added!")
@@ -65,6 +79,13 @@ public class EffectArrayList extends SubscribableList<MyEffect> {
 
     private void revokeEffect(MyEffect effect) {
         if (player.isOnline()) {
+            effect.removalSound();
+            if(effect.getEffectType().equals(EffectType.UNKNOWN)) {
+                TextComponent component = Component.text("There was no effect found, that could be applied to you!")
+                        .color(NamedTextColor.RED);
+                player.sendMessage(component);
+                return;
+            }
             effect.revoke(player);
             Color color = effect.getType().getColor();
             TextComponent component = Component.text(effect.getType().getName() + ", " + (effect.getLevel() + 1) + " was removed!")
@@ -82,13 +103,23 @@ public class EffectArrayList extends SubscribableList<MyEffect> {
         return myEffects.size() > 0;
     }
 
+    public boolean containsEffect(PotionEffect effect) {
+        Collection<MyEffect> myEffects = new ArrayDeque<>();
+        myEffects.addAll(BadMyEffect.search(effect));
+        myEffects.addAll(GoodMyEffect.search(effect));
+
+        return this.containsAll(myEffects);
+    }
+
     public int calculateValue() {
         int i = 0;
         for (MyEffect myEffect : this) {
-            Calcable effectType = myEffect.getEffectType();
-            i = effectType.calc(i);
+            if(myEffect != null) {
+                Calcable effectType = myEffect.getEffectType();
+                i = effectType.calc(i);
+            }
         }
-        player.sendMessage("your current value: " + i);
+        //player.sendMessage("your current value: " + i);
         return i;
     }
 

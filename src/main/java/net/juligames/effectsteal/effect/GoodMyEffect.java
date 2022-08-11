@@ -1,5 +1,6 @@
 package net.juligames.effectsteal.effect;
 
+import org.bukkit.Sound;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -92,5 +93,16 @@ public enum GoodMyEffect implements MyEffect {
             }
         }
         return collection;
+    }
+
+
+    @Override
+    public Sound additionSound() {
+        return Sound.UI_TOAST_IN;
+    }
+
+    @Override
+    public Sound removalSound() {
+        return Sound.UI_TOAST_OUT;
     }
 }
