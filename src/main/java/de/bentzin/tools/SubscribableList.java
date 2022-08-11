@@ -135,5 +135,6 @@ public class SubscribableList<E> extends ArrayList<E> {
         }
         super.clear();
     }
+
 }
 
