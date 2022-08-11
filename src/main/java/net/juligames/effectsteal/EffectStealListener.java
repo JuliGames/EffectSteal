@@ -74,6 +74,13 @@ public final class EffectStealListener implements Listener {
             else if (event.getAction().equals(EntityPotionEffectEvent.Action.CHANGED)) {
                 event.setCancelled(!myEffects.hasEffect(event.getNewEffect()));
             }
+            if(event.isCancelled()) {
+                if(event.getNewEffect().getType() != null)
+                    EffectSteal.log("Blocked effect: " + event.getNewEffect().getType().getName() + " on " + event.getEntity().getName());
+                else
+                    EffectSteal.log("Blocked removal of effect: " + event.getOldEffect().getType().getName() + " on " + event.getEntity().getName());
+
+            }
         }else return;
     }
 
