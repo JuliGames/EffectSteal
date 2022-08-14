@@ -89,8 +89,6 @@ public final class EffectStealListener implements Listener {
     @Contract(pure = true)
     @EventHandler
     public void onMilk(@NotNull PlayerInteractEvent event) {
-        Player player = event.getPlayer();
-
         if(event.getMaterial().equals(Material.MILK_BUCKET)) {
             if(event.getAction().equals(Action.RIGHT_CLICK_BLOCK)
                     || event.getAction().equals(Action.RIGHT_CLICK_AIR)){
