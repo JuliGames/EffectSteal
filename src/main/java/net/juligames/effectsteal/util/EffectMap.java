@@ -16,7 +16,7 @@ public final class EffectMap extends HashMap<UUID, EffectArrayList> {
         EffectArrayList effectArrayList = get(uuid);
 
         if (calculateValue <= -1) {
-            MyEffect oneRandom = effectArrayList.getOneRandom(EffectType.BAD);
+            MyEffect oneRandom = effectArrayList.getOneRandom(EffectType.BAD,true);
             effectArrayList.remove(oneRandom != null ? oneRandom : new UnknownEffect());
         } else if (calculateValue >= 0) {
             effectArrayList.add(GoodMyEffect.values()[0].getOneNewRandom(effectArrayList.toArray(new MyEffect[0])));
@@ -28,7 +28,7 @@ public final class EffectMap extends HashMap<UUID, EffectArrayList> {
         EffectArrayList effectArrayList = get(uuid);
 
         if (calculateValue >= 1) {
-            MyEffect oneRandom = effectArrayList.getOneRandom(EffectType.GOOD);
+            MyEffect oneRandom = effectArrayList.getOneRandom(EffectType.GOOD,true);
             effectArrayList.remove(oneRandom != null ? oneRandom : new UnknownEffect());
         } else if (calculateValue <= 0) {
             effectArrayList.add(BadMyEffect.values()[0].getOneNewRandom(effectArrayList.toArray(new MyEffect[0])));

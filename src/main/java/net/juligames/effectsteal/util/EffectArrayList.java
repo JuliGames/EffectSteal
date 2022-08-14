@@ -15,9 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.security.InvalidParameterException;
-import java.util.ArrayDeque;
-import java.util.Collection;
-import java.util.Random;
+import java.util.*;
 
 
 public class EffectArrayList extends SubscribableList<MyEffect> {
@@ -76,6 +74,7 @@ public class EffectArrayList extends SubscribableList<MyEffect> {
 
     private void revokeEffect(MyEffect effect) {
         if (player.isOnline()) {
+
             effect.removalSound();
             if (effect.getEffectType().equals(EffectType.UNKNOWN)) {
                 TextComponent component = Component.text("There was no effect found, that could be applied to you!")
@@ -125,19 +124,80 @@ public class EffectArrayList extends SubscribableList<MyEffect> {
         return get(rnd);
     }
 
+
+    /**
+     *
+     * @return all MyEffects in this List that share the PotionEffectType with the given effect!
+     */
+    public Collection<MyEffect> getSimilar(MyEffect effect) {
+        Collection<MyEffect> collection = new ArrayList<>();
+        for (MyEffect myEffect : this) {
+            if(myEffect.isSimilar(effect)) {
+                collection.add(myEffect);
+            }
+        }
+        return collection;
+    }
+
+
+    /**
+     * @param myEffect the effect
+     * @param save if set to true the myEffect needs to be part of this list!
+     * @return all MyEffects in this List that depend on a given MyEffect
+     */
+    public Collection<MyEffect> getDependent(MyEffect myEffect, boolean save) {
+        if(save) {
+            if(!contains(myEffect)) throw new InvalidParameterException("myEffect is not contained in this list! Set save = false to run anyway!");
+        }
+        Collection<MyEffect> collection = new ArrayList<>();
+        for (MyEffect effect : this) {
+            if(effect.hasDependencies()) {
+                for (MyEffect dependency : effect.getDependencies()) {
+                    if(dependency.equals(myEffect)) {
+                        //dependent for myEffect found!!!
+                        collection.add(effect);
+                    }
+                }
+            }
+        }
+        return collection;
+    }
+
+
+
+    //Standby
     @Nullable
-    public MyEffect getOneRandom(EffectType effectType) {
+    public MyEffect getOneRandom(EffectType effectType, boolean forRemoval) {
+        return getRandomFromList(effectType,this,true);
+    }
+
+    protected MyEffect getRandomFromList(EffectType effectType, ArrayList<MyEffect> myEffects, boolean forRemoval) {
         int rnd = 0;
         for (int i = 0; i < this.size(); i++) {
             rnd = new Random().nextInt(size());
-            MyEffect myEffect = get(rnd);
+            MyEffect myEffect = myEffects.get(rnd);
+
             if (myEffect.getEffectType().equals(effectType)) {
-                return myEffect;
+                if(!forRemoval) {
+                    return myEffect;
+                }else {
+                    Collection<MyEffect> dependent = getDependent(myEffect, true);
+                    if(dependent.size() == 0) {
+                        return myEffect;
+                    }else {
+                        return getRandomFromList(effectType,new ArrayList<>(dependent), forRemoval);
+                    }
+                }
             }
-
-
         }
         return null;
     }
+
+  @Nullable
+    public MyEffect getOneRandom(EffectType effectType) {
+        return getOneRandom(effectType,false);
+    }
+
+
 }
 
