@@ -24,15 +24,19 @@ public interface MyEffect {
         return getDependencies().length != 0;
     }
 
-    default void grant(@NotNull Player player) {
+    default void grant(@NotNull Player player, boolean silent) {
         player.addPotionEffect(new PotionEffect(getType(), Integer.MAX_VALUE, getLevel()));
         player.playSound(player.getLocation(), additionSound(), 100, 0);
     }
 
-    default void revoke(@NotNull Player player) {
+    default void revoke(@NotNull Player player, boolean silent) {
         player.removePotionEffect(getType());//TODO removes every effect
+
         player.playSound(player.getLocation(), removalSound(), 100, 0);
     }
+
+    default void revoke(@NotNull Player player) {revoke(player,false);}
+    default void grant(@NotNull Player player) {grant(player, false);}
 
 
     default Sound additionSound() {

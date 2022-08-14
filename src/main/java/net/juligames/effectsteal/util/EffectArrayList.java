@@ -83,6 +83,7 @@ public class EffectArrayList extends SubscribableList<MyEffect> {
                 return;
             }
             effect.revoke(player);
+            getSimilar(effect).forEach(myEffect -> myEffect.grant(player,true));
             Color color = effect.getType().getColor();
             TextComponent component = Component.text(effect.getType().getName() + ", " + (effect.getLevel() + 1) + " was removed!")
                     .color(TextColor.color(color.getRed(), color.getGreen(), color.getBlue()));
