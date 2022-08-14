@@ -91,5 +91,15 @@ public interface MyEffect {
         //No result!
         return null;
     }
+
+    /**
+     *
+     * @param myEffect The effect to check similarity on
+     * @return if this and myEffect share the same PotionEffectType
+     */
+    default <E extends MyEffect> boolean isSimilar(@NotNull E myEffect) {
+        return myEffect.getType().equals(getType());
+    }
+
 }
 
