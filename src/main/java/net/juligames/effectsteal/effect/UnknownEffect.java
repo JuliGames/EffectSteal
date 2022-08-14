@@ -4,10 +4,10 @@ import org.bukkit.Sound;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
-public class UnknownEffect implements MyEffect{
+public class UnknownEffect implements MyEffect {
     @Override
     public @NotNull PotionEffectType getType() {
-       throw new UnsupportedOperationException("getType() is not supported for " + this.getClass().getSimpleName());
+        throw new UnsupportedOperationException("getType() is not supported for " + this.getClass().getSimpleName());
     }
 
     @Override

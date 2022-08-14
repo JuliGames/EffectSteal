@@ -12,12 +12,12 @@ public enum BadMyEffect implements MyEffect {
     SLOWNESS(PotionEffectType.SLOW, 0),
     SLOWNESS_2(PotionEffectType.SLOW, 1, SLOWNESS),
 
-    WEAKNESS(PotionEffectType.WEAKNESS,0),
+    WEAKNESS(PotionEffectType.WEAKNESS, 0),
     SLOW_DIGGING(PotionEffectType.SLOW_DIGGING, 0),
-    HUNGER(PotionEffectType.HUNGER,0),
-    UNLUCKY(PotionEffectType.UNLUCK,0),
-    SLOW_FALLING(PotionEffectType.SLOW_FALLING,1, GoodMyEffect.SLOW_FALLING),
-    BAD_OMEN(PotionEffectType.BAD_OMEN,0),
+    HUNGER(PotionEffectType.HUNGER, 0),
+    UNLUCKY(PotionEffectType.UNLUCK, 0),
+    SLOW_FALLING(PotionEffectType.SLOW_FALLING, 1, GoodMyEffect.SLOW_FALLING),
+    BAD_OMEN(PotionEffectType.BAD_OMEN, 0),
     ;
 
 
@@ -37,6 +37,16 @@ public enum BadMyEffect implements MyEffect {
         this.type = type;
         this.level = level;
         this.dependencies = new MyEffect[0];
+    }
+
+    public static @NotNull Collection<BadMyEffect> search(PotionEffect potionEffect) {
+        Collection<BadMyEffect> collection = new ArrayList<>();
+        for (BadMyEffect value : values()) {
+            if (value.getType().equals(potionEffect.getType()) && value.getLevel() == potionEffect.getAmplifier()) {
+                collection.add(value);
+            }
+        }
+        return collection;
     }
 
     @Override
@@ -63,16 +73,6 @@ public enum BadMyEffect implements MyEffect {
     @Override
     public EffectType getEffectType() {
         return EffectType.BAD;
-    }
-
-    public static @NotNull Collection<BadMyEffect> search(PotionEffect potionEffect) {
-        Collection<BadMyEffect> collection = new ArrayList<>();
-        for (BadMyEffect value : values()) {
-            if(value.getType().equals(potionEffect.getType()) && value.getLevel() == potionEffect.getAmplifier()) {
-                collection.add(value);
-            }
-        }
-        return collection;
     }
 
     @Override

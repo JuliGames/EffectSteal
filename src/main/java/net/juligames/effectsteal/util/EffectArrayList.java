@@ -11,7 +11,6 @@ import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,15 +32,15 @@ public class EffectArrayList extends SubscribableList<MyEffect> {
         }
 
         subscribe((effect, subscriptionType) -> {
-            if(effect != null)
+            if (effect != null)
                 grantEffect(effect);
             else
                 grantEffect(new UnknownEffect());
         }, SubscriptionType.ADD);
 
         subscribe((effect, subscriptionType) -> {
-            if(effect != null)
-             revokeEffect(effect);
+            if (effect != null)
+                revokeEffect(effect);
             else
                 grantEffect(new UnknownEffect());
         }, SubscriptionType.REMOVE);
@@ -56,16 +55,15 @@ public class EffectArrayList extends SubscribableList<MyEffect> {
     }
 
 
-
     private void grantEffect(@NotNull MyEffect effect) {
         if (player.isOnline()) {
             effect.additionSound();
-            if(effect.getEffectType().equals(EffectType.UNKNOWN)) {
+            if (effect.getEffectType().equals(EffectType.UNKNOWN)) {
 
                 TextComponent component = Component.text("There was no effect found, that could be applied to you!")
                         .color(NamedTextColor.RED);
                 player.sendMessage(component);
-              return;
+                return;
             }
             effect.grant(player);
             Color color = effect.getType().getColor();
@@ -73,14 +71,13 @@ public class EffectArrayList extends SubscribableList<MyEffect> {
                     .color(TextColor.color(color.getRed(), color.getGreen(), color.getBlue()));
             player.sendMessage(component);
             player.sendActionBar(component);
-        }
-        else reset();
+        } else reset();
     }
 
     private void revokeEffect(MyEffect effect) {
         if (player.isOnline()) {
             effect.removalSound();
-            if(effect.getEffectType().equals(EffectType.UNKNOWN)) {
+            if (effect.getEffectType().equals(EffectType.UNKNOWN)) {
                 TextComponent component = Component.text("There was no effect found, that could be applied to you!")
                         .color(NamedTextColor.RED);
                 player.sendMessage(component);
@@ -92,8 +89,7 @@ public class EffectArrayList extends SubscribableList<MyEffect> {
                     .color(TextColor.color(color.getRed(), color.getGreen(), color.getBlue()));
             player.sendMessage(component);
             player.sendActionBar(component);
-        }
-        else reset();
+        } else reset();
     }
 
     public boolean hasEffect(PotionEffect effect) {
@@ -114,7 +110,7 @@ public class EffectArrayList extends SubscribableList<MyEffect> {
     public int calculateValue() {
         int i = 0;
         for (MyEffect myEffect : this) {
-            if(myEffect != null) {
+            if (myEffect != null) {
                 Calcable effectType = myEffect.getEffectType();
                 i = effectType.calc(i);
             }
@@ -135,7 +131,7 @@ public class EffectArrayList extends SubscribableList<MyEffect> {
         for (int i = 0; i < this.size(); i++) {
             rnd = new Random().nextInt(size());
             MyEffect myEffect = get(rnd);
-            if(myEffect.getEffectType().equals(effectType)){
+            if (myEffect.getEffectType().equals(effectType)) {
                 return myEffect;
             }
 

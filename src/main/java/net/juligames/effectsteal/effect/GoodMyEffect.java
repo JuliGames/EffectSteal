@@ -12,30 +12,30 @@ public enum GoodMyEffect implements MyEffect {
     SPEED(PotionEffectType.SPEED, 0),
     SPEED_2(PotionEffectType.SPEED, 1, SPEED),
 
-    JUMP_BOOST(PotionEffectType.JUMP,0),
-    JUMP_BOOST_2(PotionEffectType.JUMP,1,JUMP_BOOST),
+    JUMP_BOOST(PotionEffectType.JUMP, 0),
+    JUMP_BOOST_2(PotionEffectType.JUMP, 1, JUMP_BOOST),
 
-    RESISTANCE(PotionEffectType.DAMAGE_RESISTANCE,0),
-    RESISTANCE_2(PotionEffectType.DAMAGE_RESISTANCE,1,RESISTANCE),
+    RESISTANCE(PotionEffectType.DAMAGE_RESISTANCE, 0),
+    RESISTANCE_2(PotionEffectType.DAMAGE_RESISTANCE, 1, RESISTANCE),
 
-    HASTE(PotionEffectType.FAST_DIGGING,0),
-    HASTE_2(PotionEffectType.FAST_DIGGING,1,HASTE),
+    HASTE(PotionEffectType.FAST_DIGGING, 0),
+    HASTE_2(PotionEffectType.FAST_DIGGING, 1, HASTE),
 
-    REGENERATION(PotionEffectType.REGENERATION,0),
-    REGENERATION_2(PotionEffectType.REGENERATION,1,REGENERATION),
+    REGENERATION(PotionEffectType.REGENERATION, 0),
+    REGENERATION_2(PotionEffectType.REGENERATION, 1, REGENERATION),
 
-    WATER_BREATHING(PotionEffectType.WATER_BREATHING,0),
-    NIGHT_VISION(PotionEffectType.NIGHT_VISION,0),
-    HEALTH(PotionEffectType.HEALTH_BOOST,0),
-    LUCK(PotionEffectType.LUCK,0),
+    WATER_BREATHING(PotionEffectType.WATER_BREATHING, 0),
+    NIGHT_VISION(PotionEffectType.NIGHT_VISION, 0),
+    HEALTH(PotionEffectType.HEALTH_BOOST, 0),
+    LUCK(PotionEffectType.LUCK, 0),
 
-    SLOW_FALLING(PotionEffectType.SLOW_FALLING,0),
+    SLOW_FALLING(PotionEffectType.SLOW_FALLING, 0),
 
-    CONDUIT_POWER(PotionEffectType.CONDUIT_POWER,0),
-    DOLPHINS_GRACE(PotionEffectType.DOLPHINS_GRACE,0),
-    HERO(PotionEffectType.HERO_OF_THE_VILLAGE,0),
+    CONDUIT_POWER(PotionEffectType.CONDUIT_POWER, 0),
+    DOLPHINS_GRACE(PotionEffectType.DOLPHINS_GRACE, 0),
+    HERO(PotionEffectType.HERO_OF_THE_VILLAGE, 0),
 
-    FIRE_RESISTANCE(PotionEffectType.FIRE_RESISTANCE,0),
+    FIRE_RESISTANCE(PotionEffectType.FIRE_RESISTANCE, 0),
     STRENGTH(PotionEffectType.INCREASE_DAMAGE, 0),
 
     ;
@@ -56,6 +56,16 @@ public enum GoodMyEffect implements MyEffect {
         this.type = type;
         this.level = level;
         this.dependencies = new MyEffect[0];
+    }
+
+    public static @NotNull Collection<GoodMyEffect> search(PotionEffect potionEffect) {
+        Collection<GoodMyEffect> collection = new ArrayList<>();
+        for (GoodMyEffect value : values()) {
+            if (value.getType().equals(potionEffect.getType()) && value.getLevel() == potionEffect.getAmplifier()) {
+                collection.add(value);
+            }
+        }
+        return collection;
     }
 
     @Override
@@ -83,18 +93,6 @@ public enum GoodMyEffect implements MyEffect {
     public PotionEffectType getType() {
         return type;
     }
-
-
-    public static @NotNull Collection<GoodMyEffect> search(PotionEffect potionEffect) {
-        Collection<GoodMyEffect> collection = new ArrayList<>();
-        for (GoodMyEffect value : values()) {
-            if(value.getType().equals(potionEffect.getType()) && value.getLevel() == potionEffect.getAmplifier()) {
-                collection.add(value);
-            }
-        }
-        return collection;
-    }
-
 
     @Override
     public Sound additionSound() {
