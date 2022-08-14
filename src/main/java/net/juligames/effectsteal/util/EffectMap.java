@@ -8,17 +8,17 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.UUID;
 
-public final class EffectMap extends HashMap<UUID,EffectArrayList> {
+public final class EffectMap extends HashMap<UUID, EffectArrayList> {
 
 
     public void plus(UUID uuid) {
         int calculateValue = calculateValue(uuid);
         EffectArrayList effectArrayList = get(uuid);
 
-        if(calculateValue <= -1) {
+        if (calculateValue <= -1) {
             MyEffect oneRandom = effectArrayList.getOneRandom(EffectType.BAD);
-            effectArrayList.remove(oneRandom != null? oneRandom : new UnknownEffect());
-        } else if( calculateValue >= 0) {
+            effectArrayList.remove(oneRandom != null ? oneRandom : new UnknownEffect());
+        } else if (calculateValue >= 0) {
             effectArrayList.add(GoodMyEffect.values()[0].getOneNewRandom(effectArrayList.toArray(new MyEffect[0])));
         }
     }
@@ -27,10 +27,10 @@ public final class EffectMap extends HashMap<UUID,EffectArrayList> {
         int calculateValue = calculateValue(uuid);
         EffectArrayList effectArrayList = get(uuid);
 
-        if(calculateValue >= 1) {
+        if (calculateValue >= 1) {
             MyEffect oneRandom = effectArrayList.getOneRandom(EffectType.GOOD);
-            effectArrayList.remove( oneRandom != null? oneRandom : new UnknownEffect());
-        } else if( calculateValue <= 0) {
+            effectArrayList.remove(oneRandom != null ? oneRandom : new UnknownEffect());
+        } else if (calculateValue <= 0) {
             effectArrayList.add(BadMyEffect.values()[0].getOneNewRandom(effectArrayList.toArray(new MyEffect[0])));
         }
     }
@@ -41,7 +41,6 @@ public final class EffectMap extends HashMap<UUID,EffectArrayList> {
     }
 
     /**
-     *
      * @param uuid
      * @return the resulting EffectArrayList from the Map
      */
@@ -51,13 +50,13 @@ public final class EffectMap extends HashMap<UUID,EffectArrayList> {
 
     public boolean prepare(@NotNull Player player) {
         UUID uniqueId = player.getUniqueId();
-        if(containsKey(uniqueId))
+        if (containsKey(uniqueId))
             return true;
         create(uniqueId);
         return false;
     }
 
-    public void prepare(@NotNull Player @NotNull ... players){
+    public void prepare(@NotNull Player @NotNull ... players) {
         for (Player player : players) {
             prepare(player);
         }
@@ -65,10 +64,11 @@ public final class EffectMap extends HashMap<UUID,EffectArrayList> {
 
     /**
      * ! This does not clear the Map
+     *
      * @see EffectMap#clear()
      */
     public void reset() {
-     this.forEach((uuid, potionEffects) -> potionEffects.reset());
+        this.forEach((uuid, potionEffects) -> potionEffects.reset());
     }
 
     @Override

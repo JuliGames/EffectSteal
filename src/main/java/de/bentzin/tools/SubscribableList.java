@@ -5,10 +5,12 @@ import java.util.*;
 //This class is copied from my Tookkit Project
 
 /**
- * @author Ture Bentzin
  * @param <E>
+ * @author Ture Bentzin
  */
 public class SubscribableList<E> extends ArrayList<E> {
+
+    private final Map<SubscriptionType, List<Subscription<E>>> typeListMap = new HashMap<>();
 
     public SubscribableList(int initialCapacity) {
         super(initialCapacity);
@@ -19,29 +21,29 @@ public class SubscribableList<E> extends ArrayList<E> {
         initTypeListMap();
     }
 
+
     private SubscribableList(Collection<E> eCollection) {
         super(eCollection);
         initTypeListMap();
     }
 
-
-    private void initTypeListMap(){
+    private void initTypeListMap() {
         for (SubscriptionType value : SubscriptionType.values()) {
-            typeListMap.put(value,new ArrayList<>());
+            typeListMap.put(value, new ArrayList<>());
         }
     }
 
-    private final Map<SubscriptionType,List<Subscription<E>>> typeListMap = new HashMap<>();
-
     public boolean subscribe(Subscription<E> subscription, SubscriptionType subscriptionType) {
         List<Subscription<E>> subscriptionList = typeListMap.get(subscriptionType);
-        if(subscriptionList == null) throw new IllegalStateException(subscriptionType.name() +" is not allowed in " + this.getClass().getSimpleName());
+        if (subscriptionList == null)
+            throw new IllegalStateException(subscriptionType.name() + " is not allowed in " + this.getClass().getSimpleName());
         return subscriptionList.add(subscription);
     }
 
     public boolean unsubscribe(Subscription<E> subscription, SubscriptionType subscriptionType) {
         List<Subscription<E>> subscriptionList = typeListMap.get(subscriptionType);
-        if(subscriptionList == null) throw new IllegalStateException(subscriptionType.name() +" is not allowed in " + this.getClass().getSimpleName());
+        if (subscriptionList == null)
+            throw new IllegalStateException(subscriptionType.name() + " is not allowed in " + this.getClass().getSimpleName());
         return subscriptionList.remove(subscription);
     }
 
@@ -113,8 +115,12 @@ public class SubscribableList<E> extends ArrayList<E> {
         return b;
     }
 
-    public interface Subscription<E> {
-        public void subs(E e, SubscriptionType subscriptionType);
+    @Override
+    public void clear() {
+        for (E e : this) {
+            removal(e);
+        }
+        super.clear();
     }
 
 
@@ -123,17 +129,14 @@ public class SubscribableList<E> extends ArrayList<E> {
         REMOVE(new ArrayList<>());
 
         final List<Subscription> subscriptions;
+
         SubscriptionType(List<Subscription> subscriptions) {
             this.subscriptions = subscriptions;
         }
     }
 
-    @Override
-    public void clear() {
-        for (E e : this) {
-            removal(e);
-        }
-        super.clear();
+    public interface Subscription<E> {
+        void subs(E e, SubscriptionType subscriptionType);
     }
 
 }

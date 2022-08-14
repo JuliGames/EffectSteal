@@ -9,13 +9,13 @@ public enum EffectType implements Calcable {
     BAD(-1);
     private final int calc;
 
+    EffectType(int calc) {
+        this.calc = calc;
+    }
+
     @Override
     public int calc(int value) {
         return value + calc;
-    }
-
-    EffectType(int calc) {
-        this.calc = calc;
     }
 
 

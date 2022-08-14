@@ -15,21 +15,23 @@ import java.util.logging.Level;
 public final class EffectSteal extends JavaPlugin {
 
     @UnknownInitialization
-    public static EffectSteal get() { return plugin;}
+    private static EffectSteal plugin;
+    private final EffectMap effectMap = new EffectMap();
+
+    @UnknownInitialization
+    public static EffectSteal get() {
+        return plugin;
+    }
 
     public static void log(String s) {
-        if(get() == null) System.out.println(s); else
-         get().getLogger().log(Level.INFO,s);
+        if (get() == null) System.out.println(s);
+        else
+            get().getLogger().log(Level.INFO, s);
     }
 
     public static boolean hasPluginOpPermissions(@NotNull CommandSender subject) {
         return subject.hasPermission("effectsteal.operator") || subject.isOp();
     }
-
-    private final EffectMap effectMap = new EffectMap();
-
-    @UnknownInitialization
-    private static EffectSteal plugin;
 
     @Override
     public void onEnable() {
