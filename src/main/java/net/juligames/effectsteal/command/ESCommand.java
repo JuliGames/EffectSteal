@@ -1,7 +1,10 @@
 package net.juligames.effectsteal.command;
 
 import net.juligames.effectsteal.EffectSteal;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.pointer.Pointer;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -14,6 +17,7 @@ import java.util.UUID;
 public class ESCommand implements CommandExecutor {
 
     //Message of the Plugin
+    @SuppressWarnings("SpellCheckingInspection")
     public final String MOTP = "Welcome to " + EffectSteal.get().getDescription().getFullName() + "! Use this command as an ingame player to access some features!";
 
 
@@ -39,8 +43,10 @@ public class ESCommand implements CommandExecutor {
                                 EffectSteal.get().getEffectMap().prepare(player1);
                                 UUID uniqueId = player1.getUniqueId();
                                 if (a.equalsIgnoreCase("add")) {
+                                    sender.sendMessage("[DEBUG]: " + ChatColor.GREEN + "+ 1 for " + player1.getName());
                                     EffectSteal.get().getEffectMap().plus(uniqueId);
                                 } else {
+                                    sender.sendMessage("[DEBUG]: " + ChatColor.DARK_RED + "- 1 for " + player1.getName());
                                     EffectSteal.get().getEffectMap().minus(uniqueId);
                                 }
 
