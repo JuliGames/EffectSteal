@@ -3,12 +3,24 @@ package net.juligames.effectsteal.util;
 import net.juligames.effectsteal.effect.*;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.UUID;
 
 public final class EffectMap extends HashMap<UUID, EffectArrayList> {
+
+    /**
+     * @param effectMap effectMap
+     * @return a new effect map containing the content of effectMap
+     */
+    public static @NotNull EffectMap copyFrom(EffectMap effectMap) {
+        EffectMap effectMap1 = new EffectMap();
+        effectMap1.putAll(effectMap);
+        return effectMap1;
+    }
+
 
 
     public void plus(UUID uuid) {
@@ -69,6 +81,19 @@ public final class EffectMap extends HashMap<UUID, EffectArrayList> {
      */
     public void reset() {
         this.forEach((uuid, potionEffects) -> potionEffects.reset());
+    }
+
+    /**
+     * This clears the data (map) and inputs the data of effectMap into this
+     *
+     * @see EffectMap#clear()
+     * @see EffectMap#reset()
+     * @see EffectMap#copyFrom(EffectMap)
+     */
+    @ApiStatus.Internal
+    public void clear(EffectMap effectMap) {
+        clear();
+        putAll(effectMap);
     }
 
     @Override
