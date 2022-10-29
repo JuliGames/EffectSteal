@@ -7,7 +7,6 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Shuffle {
 
-
     //credits: PhiLho
     // Implementing Fisher–Yates shuffle
     public static <E> void shuffleArray(E @NotNull [] ar) {
@@ -19,6 +18,7 @@ public class Shuffle {
             E a = ar[index];
             ar[index] = ar[i];
             ar[i] = a;
+
         }
     }
 }

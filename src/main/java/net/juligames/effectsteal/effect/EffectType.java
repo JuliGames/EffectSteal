@@ -1,8 +1,8 @@
 package net.juligames.effectsteal.effect;
 
-import net.juligames.effectsteal.Calcable;
+import net.juligames.effectsteal.Calculable;
 
-public enum EffectType implements Calcable {
+public enum EffectType implements Calculable {
     GOOD(1),
     NEUTRAL(0),
     UNKNOWN(0),

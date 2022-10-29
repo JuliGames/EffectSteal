@@ -1,7 +1,7 @@
 package net.juligames.effectsteal.util;
 
 import de.bentzin.tools.SubscribableList;
-import net.juligames.effectsteal.Calcable;
+import net.juligames.effectsteal.Calculable;
 import net.juligames.effectsteal.EffectSteal;
 import net.juligames.effectsteal.effect.*;
 import net.kyori.adventure.text.Component;
@@ -111,7 +111,7 @@ public class EffectArrayList extends SubscribableList<MyEffect> {
         int i = 0;
         for (MyEffect myEffect : this) {
             if (myEffect != null) {
-                Calcable effectType = myEffect.getEffectType();
+                Calculable effectType = myEffect.getEffectType();
                 i = effectType.calc(i);
             }
         }

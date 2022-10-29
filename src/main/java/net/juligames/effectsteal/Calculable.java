@@ -1,5 +1,5 @@
 package net.juligames.effectsteal;
 
-public interface Calcable {
+public interface Calculable {
     int calc(int value);
 }
