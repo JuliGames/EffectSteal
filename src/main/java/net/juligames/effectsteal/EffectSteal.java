@@ -14,7 +14,6 @@ import org.bukkit.potion.PotionEffect;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.logging.Level;
 
@@ -23,6 +22,7 @@ public final class EffectSteal extends JavaPlugin {
     @UnknownInitialization
     private static EffectSteal plugin;
     private final EffectMap effectMap = new EffectMap();
+    private boolean running = false;
 
     @UnknownInitialization
     public static EffectSteal get() {
