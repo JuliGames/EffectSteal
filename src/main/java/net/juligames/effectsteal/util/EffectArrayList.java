@@ -1,6 +1,6 @@
 package net.juligames.effectsteal.util;
 
-import de.bentzin.tools.SubscribableList;
+import de.bentzin.tools.collection.SubscribableList;
 import net.juligames.effectsteal.Calculable;
 import net.juligames.effectsteal.EffectSteal;
 import net.juligames.effectsteal.effect.*;

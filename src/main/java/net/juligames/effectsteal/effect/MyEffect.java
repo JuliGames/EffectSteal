@@ -1,6 +1,6 @@
 package net.juligames.effectsteal.effect;
 
-import de.bentzin.tools.Shuffle;
+import de.bentzin.tools.misc.Shuffle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;

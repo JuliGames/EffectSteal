@@ -1,14 +1,20 @@
 package net.juligames.effectsteal;
 
 import net.juligames.effectsteal.command.ESCommand;
+import net.juligames.effectsteal.service.EffectStealController;
+import net.juligames.effectsteal.service.EffectStealService;
 import net.juligames.effectsteal.util.EffectMap;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.logging.Level;
 
@@ -29,6 +35,15 @@ public final class EffectSteal extends JavaPlugin {
             get().getLogger().log(Level.INFO, s);
     }
 
+    @Nullable
+    public RegisteredServiceProvider<EffectStealService> serviceProvider() {
+        return Bukkit.getServicesManager().getRegistration(EffectStealService.class);
+    }
+
+    @Nullable
+    public EffectStealService service() {
+        return Bukkit.getServicesManager().load(EffectStealService.class);
+    }
     public static boolean hasPluginOpPermissions(@NotNull CommandSender subject) {
         return subject.hasPermission("effectsteal.operator") || subject.isOp();
     }
@@ -41,6 +56,9 @@ public final class EffectSteal extends JavaPlugin {
         getCommand("es").setExecutor(new ESCommand());
         EffectStealListener effectStealListener = new EffectStealListener(this);
 
+        //service
+        EffectStealController controller = new EffectStealController();
+        Bukkit.getServer().getServicesManager().register(EffectStealService.class, controller,this, ServicePriority.Normal);
     }
 
     @Override
