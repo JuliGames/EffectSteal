@@ -31,46 +31,51 @@ public final class EffectStealListener implements Listener {
 
     @EventHandler
     public void onKill(@NotNull PlayerDeathEvent deathEvent) {
-        Player player = deathEvent.getPlayer();
-        Player killer = player.getKiller();
-        if (killer == null) {
+        if(EffectSteal.get().isRunning()) {
+            Player player = deathEvent.getPlayer();
+            Player killer = player.getKiller();
+            if (killer == null) {
+                emap.put(player.getUniqueId(), player.getActivePotionEffects());
+                return;
+            }
+            EffectSteal.log(player.getName() + " was killed by " + killer);
+            EffectSteal.get().reportKill(killer, player);
             emap.put(player.getUniqueId(), player.getActivePotionEffects());
-            return;
         }
-        EffectSteal.log(player.getName() + " was killed by " + killer);
-        EffectSteal.get().reportKill(killer, player);
-        emap.put(player.getUniqueId(), player.getActivePotionEffects());
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onRespawn(@NotNull PlayerPostRespawnEvent respawnEvent) {
-        Player player = respawnEvent.getPlayer();
-        Collection<PotionEffect> effects = emap.get(player.getUniqueId());
-        if (effects != null && effects.size() != 0)
-            player.addPotionEffects(effects);
+        if(EffectSteal.get().isRunning()) {
+            Player player = respawnEvent.getPlayer();
+            Collection<PotionEffect> effects = emap.get(player.getUniqueId());
+            if (effects != null && effects.size() != 0)
+                player.addPotionEffects(effects);
+        }
     }
 
     @EventHandler
     public void onEffect(@NotNull EntityPotionEffectEvent event) {
-        Entity entity = event.getEntity();
-        if (entity instanceof Player) {
-            Player player = (Player) entity;
+        if(EffectSteal.get().isRunning()) {
+            Entity entity = event.getEntity();
+            if (entity instanceof Player) {
+                Player player = (Player) entity;
 
-            EffectArrayList myEffects = EffectSteal.get().getEffectMap().get(player.getUniqueId());
-            if (myEffects == null) {
-                event.setCancelled(true);
-                return;
-            }
+                EffectArrayList myEffects = EffectSteal.get().getEffectMap().get(player.getUniqueId());
+                if (myEffects == null) {
+                    event.setCancelled(true);
+                    return;
+                }
 
-            if (event.getAction().equals(EntityPotionEffectEvent.Action.ADDED)) {
-                event.setCancelled(!myEffects.containsEffect(event.getNewEffect()));
-            } else if (event.getAction().equals(EntityPotionEffectEvent.Action.REMOVED)
-                    || event.getAction().equals(EntityPotionEffectEvent.Action.CLEARED)) {
+                if (event.getAction().equals(EntityPotionEffectEvent.Action.ADDED)) {
+                    event.setCancelled(!myEffects.containsEffect(event.getNewEffect()));
+                } else if (event.getAction().equals(EntityPotionEffectEvent.Action.REMOVED)
+                        || event.getAction().equals(EntityPotionEffectEvent.Action.CLEARED)) {
 
-                event.setCancelled(myEffects.containsEffect(event.getOldEffect()));
-            } else if (event.getAction().equals(EntityPotionEffectEvent.Action.CHANGED)) {
-                event.setCancelled(!myEffects.containsEffect(event.getNewEffect()));
-            }
+                    event.setCancelled(myEffects.containsEffect(event.getOldEffect()));
+                } else if (event.getAction().equals(EntityPotionEffectEvent.Action.CHANGED)) {
+                    event.setCancelled(!myEffects.containsEffect(event.getNewEffect()));
+                }
          /*   if(event.isCancelled()) {
                 if(event.getNewEffect() != null)
                     EffectSteal.log("Blocked effect: " + event.getNewEffect().getType().getName() + " on " + event.getEntity().getName());
@@ -80,20 +85,23 @@ public final class EffectStealListener implements Listener {
             }
 
           */
-        } else return;
+            } else return;
+        }
     }
 
 
     @Contract(pure = true)
     @EventHandler
     public void onMilk(@NotNull PlayerInteractEvent event) {
-        if (event.getMaterial().equals(Material.MILK_BUCKET)) {
-            if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)
-                    || event.getAction().equals(Action.RIGHT_CLICK_AIR)) {
-                event.setCancelled(true);
+        if(EffectSteal.get().isRunning()) {
+            if (event.getMaterial().equals(Material.MILK_BUCKET)) {
+                if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)
+                        || event.getAction().equals(Action.RIGHT_CLICK_AIR)) {
+                    event.setCancelled(true);
+                }
             }
-        }
 
+        }
     }
 
 

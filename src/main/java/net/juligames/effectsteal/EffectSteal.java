@@ -1,5 +1,6 @@
 package net.juligames.effectsteal;
 
+import de.bentzin.tools.misc.SubscribableType;
 import net.juligames.effectsteal.command.ESCommand;
 import net.juligames.effectsteal.service.EffectStealController;
 import net.juligames.effectsteal.service.EffectStealService;
@@ -15,6 +16,7 @@ import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
 import java.util.logging.Level;
 
 public final class EffectSteal extends JavaPlugin {
@@ -22,7 +24,7 @@ public final class EffectSteal extends JavaPlugin {
     @UnknownInitialization
     private static EffectSteal plugin;
     private final EffectMap effectMap = new EffectMap();
-    private boolean running = false;
+    private final SubscribableType<Boolean> running = new SubscribableType<>(false);
 
     @UnknownInitialization
     public static EffectSteal get() {
@@ -40,6 +42,14 @@ public final class EffectSteal extends JavaPlugin {
         return Bukkit.getServicesManager().getRegistration(EffectStealService.class);
     }
 
+    public boolean isRunning() {
+        return running.getOrCatch();
+    }
+
+    public SubscribableType<Boolean> getRunning() {
+        return running;
+    }
+
     @Nullable
     public EffectStealService service() {
         return Bukkit.getServicesManager().load(EffectStealService.class);
@@ -53,7 +63,7 @@ public final class EffectSteal extends JavaPlugin {
         plugin = this;
         // Plugin startup logic
         log("Hello World!");
-        getCommand("es").setExecutor(new ESCommand());
+        Objects.requireNonNull(getCommand("es")).setExecutor(new ESCommand());
         EffectStealListener effectStealListener = new EffectStealListener(this);
 
         //service
