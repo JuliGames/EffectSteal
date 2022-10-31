@@ -1,12 +1,12 @@
 package net.juligames.effectsteal.service;
 
+import de.bentzin.tools.register.Registerator;
 import net.juligames.effectsteal.EffectSteal;
 import net.juligames.effectsteal.util.DateFormatter;
 import net.juligames.effectsteal.util.EffectMap;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.apache.commons.lang.time.DurationFormatUtils;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
@@ -15,11 +15,11 @@ import org.jetbrains.annotations.Range;
  * @author Ture Bentzin
  * 29.10.2022
  */
-public class EffectStealController implements EffectStealService{
+public class EffectStealController implements EffectStealService {
 
     private DateFormatter dateFormatter = duration ->
-        DurationFormatUtils.formatDurationWords(duration.toMillis(),
-                true,true);
+            DurationFormatUtils.formatDurationWords(duration.toMillis(),
+                    true, true);
     ;
 
 
@@ -28,11 +28,16 @@ public class EffectStealController implements EffectStealService{
      *
      * @param endTime    when the game should be stopped (in unix timemilis)
      * @param afterStart
-     * @implNote same as {@link EffectStealService#startNewGame(Long)} but afterStart will be executed after start procedure
+     * @implNote same as {@link EffectStealService#startNewGame(long)} but afterStart will be executed after start procedure
      * but before the game is running
      */
     @Override
-    public void startNewGame(Long endTime, Runnable afterStart) {
+    public void startNewGame(long endTime, @NotNull Runnable afterStart) {
+        EffectSteal effectSteal = EffectSteal.get();
+        effectSteal.setStartTime(System.currentTimeMillis());
+        effectSteal.setEndTime(endTime);
+        afterStart.run();
+        effectSteal.getRunning().set(true);
 
     }
 
@@ -44,7 +49,7 @@ public class EffectStealController implements EffectStealService{
      */
     @Override
     public void killGameEarly(Component reason) {
-
+        EffectSteal.get().killGame(reason);
     }
 
     /**
@@ -53,7 +58,16 @@ public class EffectStealController implements EffectStealService{
      */
     @Override
     public void killGameEarly() {
+        killGameEarly(MiniMessage.miniMessage().deserialize("<yellow>Your EffectSteal game was killed!"));
+    }
 
+    @Override
+    public void addGameEndHandler(Runnable handler) {
+        try {
+            EffectSteal.get().getGameEndHandlers().register(handler);
+        } catch (Registerator.DuplicateEntryException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -61,7 +75,7 @@ public class EffectStealController implements EffectStealService{
      */
     @Override
     public @Range(from = 0, to = Long.MAX_VALUE) long getEndTime() {
-        return 0;
+        return EffectSteal.get().getEndTime();
     }
 
     /**
@@ -70,7 +84,7 @@ public class EffectStealController implements EffectStealService{
      */
     @Override
     public @Range(from = -1, to = Long.MAX_VALUE) long getStartTime() {
-        return 0;
+        return EffectSteal.get().getStartTime();
     }
 
     /**
@@ -79,11 +93,9 @@ public class EffectStealController implements EffectStealService{
      */
     @Override
     public boolean isGameFinished() {
-        return false;
+        return !EffectSteal.get().isRunning();
     }
 
-    public final Component broadCastPrefix =
-            MiniMessage.miniMessage().deserialize("<gray>[<red>Effect<yellow>Steal</yellow></red>]</gray><color:#3b83ff> ");
 
     /**
      * Send a message to all players on effectSteal
@@ -92,7 +104,7 @@ public class EffectStealController implements EffectStealService{
      */
     @Override
     public void broadCast(Component message) {
-        Bukkit.getOnlinePlayers().forEach(player -> player.sendMessage(broadCastPrefix.append(message)));
+        EffectSteal.get().broadCast(message);
     }
 
     /**

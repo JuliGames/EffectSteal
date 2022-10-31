@@ -22,7 +22,7 @@ public interface EffectStealService {
      *
      * @param endTime when the game should be stopped (in unix timemilis)
      */
-    default void startNewGame(Long endTime) {
+    default void startNewGame(long endTime) {
         startNewGame(endTime, () -> {
         });
     }
@@ -31,10 +31,10 @@ public interface EffectStealService {
      * reset current game (removes all effects)
      *
      * @param endTime when the game should be stopped (in unix timemilis)
-     * @implNote same as {@link EffectStealService#startNewGame(Long)} but afterStart will be executed after start procedure
+     * @implNote same as {@link EffectStealService#startNewGame(long)} but afterStart will be executed after start procedure
      * but before the game is running
      */
-    void startNewGame(Long endTime, Runnable afterStart);
+    void startNewGame(long endTime, Runnable afterStart);
 
     /**
      * Reset all effects
@@ -84,6 +84,12 @@ public interface EffectStealService {
     void broadCast(Component message);
 
     /**
+     * Add a runnable that will be run when the game ends (timer runs out or the game gets killed)
+     * @param handler the action to perform
+     */
+    void addGameEndHandler(Runnable handler);
+
+    /**
      * Gets the "Brain" of effectSteal
      *
      * @return effectMap currently used
@@ -119,6 +125,7 @@ public interface EffectStealService {
     default void minus(UUID uuid) {
         getEffectMap().minus(uuid);
     }
+
 
 
     //date formatter
