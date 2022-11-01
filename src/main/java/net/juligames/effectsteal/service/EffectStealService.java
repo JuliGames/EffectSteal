@@ -1,8 +1,11 @@
 package net.juligames.effectsteal.service;
 
 import de.bentzin.tools.DoNotOverride;
+import de.bentzin.tools.register.Registerator;
+import net.juligames.effectsteal.EffectSteal;
 import net.juligames.effectsteal.util.DateFormatter;
 import net.juligames.effectsteal.util.EffectMap;
+import net.juligames.effectsteal.util.EffectStealTimer;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
@@ -126,7 +129,13 @@ public interface EffectStealService {
         getEffectMap().minus(uuid);
     }
 
-
+    /**
+     *
+     * @return Registerator for gameEnd - add new Runnable here to execute code on the end of the game
+     */
+    default Registerator<Runnable> getGameEndHandlers() {
+        return EffectSteal.get().getGameEndHandlers();
+    }
 
     //date formatter
     DateFormatter getDateFormatter();

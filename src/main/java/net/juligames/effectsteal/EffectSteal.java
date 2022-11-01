@@ -5,9 +5,12 @@ import de.bentzin.tools.register.Registerator;
 import net.juligames.effectsteal.command.ESCommand;
 import net.juligames.effectsteal.service.EffectStealController;
 import net.juligames.effectsteal.service.EffectStealService;
+import net.juligames.effectsteal.util.DateFormatter;
 import net.juligames.effectsteal.util.EffectMap;
+import net.juligames.effectsteal.util.EffectStealTimer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -28,12 +31,19 @@ public final class EffectSteal extends JavaPlugin {
 
     @UnknownInitialization
     private static EffectSteal plugin;
+    public final Component broadCastPrefix =
+            MiniMessage.miniMessage().deserialize("<gray>[<red>Effect<yellow>Steal</yellow></red>]</gray><color:#3b83ff> ");
     private final EffectMap effectMap = new EffectMap();
     private final SubscribableType<Boolean> running = new SubscribableType<>(false);
+    private final Registerator<Runnable> gameEndHandlers = new Registerator<>();
+
+    private DateFormatter dateFormatter = duration ->
+            DurationFormatUtils.formatDurationWords(duration.toMillis(),
+                    true, true);
+
+    private EffectStealTimer effectStealTimer = null;
     private long startTime = -1L;
     private long endTime = -1L;
-
-    private final Registerator<Runnable> gameEndHandlers = new Registerator<>();
 
     @UnknownInitialization
     public static EffectSteal get() {
@@ -46,8 +56,16 @@ public final class EffectSteal extends JavaPlugin {
             get().getLogger().log(Level.INFO, s);
     }
 
+    public static boolean hasPluginOpPermissions(@NotNull CommandSender subject) {
+        return subject.hasPermission("effectsteal.operator") || subject.isOp();
+    }
+
     public long getStartTime() {
         return startTime;
+    }
+
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
     }
 
     public long getEndTime() {
@@ -56,10 +74,6 @@ public final class EffectSteal extends JavaPlugin {
 
     public void setEndTime(long endTime) {
         this.endTime = endTime;
-    }
-
-    public void setStartTime(long startTime) {
-        this.startTime = startTime;
     }
 
     public Registerator<Runnable> getGameEndHandlers() {
@@ -83,9 +97,6 @@ public final class EffectSteal extends JavaPlugin {
     public EffectStealService service() {
         return Bukkit.getServicesManager().load(EffectStealService.class);
     }
-    public static boolean hasPluginOpPermissions(@NotNull CommandSender subject) {
-        return subject.hasPermission("effectsteal.operator") || subject.isOp();
-    }
 
     @Override
     public void onEnable() {
@@ -97,26 +108,40 @@ public final class EffectSteal extends JavaPlugin {
 
         //service
         EffectStealController controller = new EffectStealController();
-        Bukkit.getServer().getServicesManager().register(EffectStealService.class, controller,this, ServicePriority.Normal);
+        Bukkit.getServer().getServicesManager().register(
+                EffectStealService.class,
+                 controller, this,
+                ServicePriority.Normal);
+
+        log("registered service....");
+        log(Bukkit.getServicesManager().getKnownServices().toString());
 
         subscribe();
     }
 
     private void subscribe() {
+        //for message and effectMap Reset
         running.subscribe((SubscribableType.QuietSubscription<Boolean>) (subscriptionType, newElement, oldElement) -> {
-            if(newElement) {
-                broadCast("<lime>Game is now running!");
-            }else {
+            if (newElement) {
+                broadCast("<green>Game is now running!");
+            } else {
                 broadCast("<red>Game is now stopped!");
 
                 //reset
                 getEffectMap().reset();
             }
         }, SubscribableType.SubscriptionType.CHANGE, SubscribableType.SubscriptionType.INITIALIZE);
-    }
 
-    public final Component broadCastPrefix =
-            MiniMessage.miniMessage().deserialize("<gray>[<red>Effect<yellow>Steal</yellow></red>]</gray><color:#3b83ff> ");
+        //for timer
+        running.subscribe((SubscribableType.QuietSubscription<Boolean>) (subscriptionType, newElement, oldElement) -> {
+            if (newElement) {
+                effectStealTimer = new EffectStealTimer(Date.from(Instant.ofEpochMilli(getEndTime())),dateFormatter);
+                effectStealTimer.startNew();
+            } else {
+                effectStealTimer.chancelAllTasks();
+            }
+        }, SubscribableType.SubscriptionType.CHANGE, SubscribableType.SubscriptionType.INITIALIZE);
+    }
 
     /**
      * Send a message to all players on effectSteal
@@ -141,7 +166,7 @@ public final class EffectSteal extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
-
+        running.set(false);
         //failsave for debug
 
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
@@ -157,7 +182,6 @@ public final class EffectSteal extends JavaPlugin {
 
     public void reportKill(Player killer, Player victim) {
         getEffectMap().prepare(killer, victim);
-
         getEffectMap().minus(victim.getUniqueId());
         getEffectMap().plus(killer.getUniqueId());
     }

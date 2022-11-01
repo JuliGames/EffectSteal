@@ -32,12 +32,28 @@ public class EffectStealTimer{
     }
 
     public final @NotNull BukkitTask startNew() {
-        return Bukkit.getScheduler().runTask(EffectSteal.get(),runnable);
+        return Bukkit.getScheduler().runTaskTimer(
+                EffectSteal.get(),
+                runnable,
+                0,20);
+    }
+
+    /**
+     * This will chancel <bold>all</bold> pendingTasks form EffectSteal
+     */
+    public final void chancelAllTasks() {
+        for (BukkitTask pendingTask : Bukkit.getScheduler().getPendingTasks()) {
+            if(pendingTask.getOwner().equals(EffectSteal.get())) {
+                pendingTask.cancel();
+            }
+        }
     }
 
 
     private final Runnable runnable = () -> Bukkit.getOnlinePlayers().forEach(player -> {
-        player.sendMessage(MiniMessage.miniMessage().deserialize("<blue>Time remaining: " +
-                getDateFormatter().apply(Duration.between(Instant.now(), getEndDate().toInstant()))));
+        String apply = getDateFormatter().apply(Duration.between(Instant.now(), getEndDate().toInstant()));
+        player.sendActionBar(MiniMessage.miniMessage().deserialize("<blue>Time remaining: <yellow>" +
+                apply));
+        //System.out.println("timer: " + apply );
     });
 }

@@ -21,8 +21,6 @@ public final class EffectMap extends HashMap<UUID, EffectArrayList> {
         return effectMap1;
     }
 
-
-
     public void plus(UUID uuid) {
         int calculateValue = calculateValue(uuid);
         EffectArrayList effectArrayList = get(uuid);

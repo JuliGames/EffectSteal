@@ -1,0 +1,4 @@
+name: EffectStealManager
+version: '${project.version}'
+main: de.bentzin.effectstealmanager.effectstealmanager.EffectStealManager
+api-version: 1.19
