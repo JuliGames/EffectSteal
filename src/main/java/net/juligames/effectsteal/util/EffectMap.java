@@ -1,6 +1,7 @@
 package net.juligames.effectsteal.util;
 
 import net.juligames.effectsteal.effect.*;
+import net.juligames.effectsteal.event.EffectStealActionEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
@@ -27,7 +28,10 @@ public final class EffectMap extends HashMap<UUID, EffectArrayList> {
 
         if (calculateValue <= -1) {
             MyEffect oneRandom = effectArrayList.getOneRandom(EffectType.BAD,true);
-            effectArrayList.remove(oneRandom != null ? oneRandom : new UnknownEffect());
+            MyEffect myEffect = (oneRandom != null ? oneRandom : new UnknownEffect());
+            //fire event
+            Bukkit.getPluginManager().callEvent(new EffectStealActionEvent(uuid,myEffect, EffectStealActionEvent.ActionType.PLUS));
+            effectArrayList.remove(myEffect);
         } else if (calculateValue >= 0) {
             effectArrayList.add(GoodMyEffect.values()[0].getOneNewRandom(effectArrayList.toArray(new MyEffect[0])));
         }
@@ -39,7 +43,10 @@ public final class EffectMap extends HashMap<UUID, EffectArrayList> {
 
         if (calculateValue >= 1) {
             MyEffect oneRandom = effectArrayList.getOneRandom(EffectType.GOOD,true);
-            effectArrayList.remove(oneRandom != null ? oneRandom : new UnknownEffect());
+            MyEffect myEffect = (oneRandom != null ? oneRandom : new UnknownEffect());
+            //fire Event
+            Bukkit.getPluginManager().callEvent(new EffectStealActionEvent(uuid,myEffect, EffectStealActionEvent.ActionType.MINUS));
+            effectArrayList.remove(myEffect);
         } else if (calculateValue <= 0) {
             effectArrayList.add(BadMyEffect.values()[0].getOneNewRandom(effectArrayList.toArray(new MyEffect[0])));
         }

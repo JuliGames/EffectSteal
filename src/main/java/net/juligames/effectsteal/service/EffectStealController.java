@@ -2,11 +2,13 @@ package net.juligames.effectsteal.service;
 
 import de.bentzin.tools.register.Registerator;
 import net.juligames.effectsteal.EffectSteal;
+import net.juligames.effectsteal.event.GameStartEvent;
 import net.juligames.effectsteal.util.DateFormatter;
 import net.juligames.effectsteal.util.EffectMap;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.apache.commons.lang.time.DurationFormatUtils;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
@@ -28,14 +30,17 @@ public class EffectStealController implements EffectStealService {
      *
      * @param endTime    when the game should be stopped (in unix timemilis)
      * @param afterStart
+     * @deprecated afterStart is no longer necessary {@link net.juligames.effectsteal.event.GameStartEvent}
      * @implNote same as {@link EffectStealService#startNewGame(long)} but afterStart will be executed after start procedure
      * but before the game is running
      */
     @Override
+    @Deprecated
     public void startNewGame(long endTime, @NotNull Runnable afterStart) {
         EffectSteal effectSteal = EffectSteal.get();
         effectSteal.setStartTime(System.currentTimeMillis());
         effectSteal.setEndTime(endTime);
+        Bukkit.getPluginManager().callEvent(new GameStartEvent(endTime));
         afterStart.run();
         effectSteal.getRunning().set(true);
 

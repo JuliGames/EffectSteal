@@ -132,7 +132,9 @@ public interface EffectStealService {
     /**
      *
      * @return Registerator for gameEnd - add new Runnable here to execute code on the end of the game
+     * @deprecated duo to {@link net.juligames.effectsteal.event.GameEndEvent} & {@link net.juligames.effectsteal.event.GameKilledEvent}
      */
+    @Deprecated
     default Registerator<Runnable> getGameEndHandlers() {
         return EffectSteal.get().getGameEndHandlers();
     }

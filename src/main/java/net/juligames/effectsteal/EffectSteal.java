@@ -3,6 +3,8 @@ package net.juligames.effectsteal;
 import de.bentzin.tools.misc.SubscribableType;
 import de.bentzin.tools.register.Registerator;
 import net.juligames.effectsteal.command.ESCommand;
+import net.juligames.effectsteal.event.GameEndEvent;
+import net.juligames.effectsteal.event.GameKilledEvent;
 import net.juligames.effectsteal.service.EffectStealController;
 import net.juligames.effectsteal.service.EffectStealService;
 import net.juligames.effectsteal.util.DateFormatter;
@@ -159,8 +161,10 @@ public final class EffectSteal extends JavaPlugin {
      * @param miniMessage message that should be sent to console, log and players
      */
     public void broadCast(String miniMessage) {
+        Component message = broadCastPrefix.append(MiniMessage.miniMessage().deserialize(miniMessage));
         Bukkit.getOnlinePlayers().forEach(player ->
-                player.sendMessage(broadCastPrefix.append(MiniMessage.miniMessage().deserialize(miniMessage))));
+                player.sendMessage(message));
+        Bukkit.getConsoleSender().sendMessage(message);
     }
 
     @Override
@@ -187,6 +191,7 @@ public final class EffectSteal extends JavaPlugin {
     }
 
     public void gameEnd() {
+        Bukkit.getPluginManager().callEvent(new GameEndEvent());
         gameEndHandlers.forEach(Runnable::run);
     }
 
@@ -195,6 +200,7 @@ public final class EffectSteal extends JavaPlugin {
         running.set(false);
 
         //gameEnd routine
+        Bukkit.getPluginManager().callEvent(new GameKilledEvent(reason));
         gameEnd();
 
         //2. kick

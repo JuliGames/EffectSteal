@@ -1,7 +1,7 @@
 package net.juligames.effectsteal.util;
 
 import net.juligames.effectsteal.EffectSteal;
-import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.juligames.effectsteal.event.TimerTickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
@@ -50,10 +50,16 @@ public class EffectStealTimer{
     }
 
 
-    private final Runnable runnable = () -> Bukkit.getOnlinePlayers().forEach(player -> {
-        String apply = getDateFormatter().apply(Duration.between(Instant.now(), getEndDate().toInstant()));
-        player.sendActionBar(MiniMessage.miniMessage().deserialize("<blue>Time remaining: <yellow>" +
-                apply));
-        //System.out.println("timer: " + apply );
-    });
+    private final Runnable runnable = () -> {
+        Instant now = Instant.now();
+        String apply = getDateFormatter().apply(Duration.between(now, getEndDate().toInstant()));
+        String mm = "<blue>Time remaining: <yellow>" + apply;
+        TimerTickEvent timerTickEvent = new TimerTickEvent(now, getEndDate(), mm);
+        Bukkit.getPluginManager().callEvent(timerTickEvent);
+
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            player.sendActionBar(timerTickEvent.getActionBarAsComponent());
+            //System.out.println("timer: " + apply );
+        });
+    };
 }
