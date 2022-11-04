@@ -15,7 +15,7 @@ import java.util.UUID;
  */
 public final class EffectStealActionEvent extends Event {
 
-    private static HandlerList handlerList = new HandlerList();
+    private static final HandlerList handlerList = new HandlerList();
     private final UUID player;
     private final MyEffect effect;
     private final ActionType actionType;
@@ -53,6 +53,6 @@ public final class EffectStealActionEvent extends Event {
 
     public enum ActionType {
         PLUS,
-        MINUS;
+        MINUS
     }
 }

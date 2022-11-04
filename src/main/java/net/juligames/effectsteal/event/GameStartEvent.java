@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class GameStartEvent extends Event {
 
-    private static HandlerList handlerList = new HandlerList();
+    private static final HandlerList handlerList = new HandlerList();
     private final long endTime;
 
     public GameStartEvent(long endTime) {

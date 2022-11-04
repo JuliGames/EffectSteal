@@ -2,11 +2,8 @@ package net.juligames.effectsteal.event;
 
 import net.juligames.effectsteal.EffectSteal;
 import net.juligames.effectsteal.util.EffectArrayList;
-import net.juligames.effectsteal.util.EffectMap;
-import net.juligames.effectsteal.util.EffectStealTimer;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.block.data.type.BubbleColumn;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
@@ -21,13 +18,12 @@ import java.util.UUID;
  * @author Ture Bentzin
  * 01.11.2022
  */
-public sealed class GameEndEvent extends Event permits SingleWinnerGameEndEvent{
+public sealed class GameEndEvent extends Event permits SingleWinnerGameEndEvent {
 
     private static final HandlerList handlerList = new HandlerList();
     private final UUID[] winner;
 
     /**
-     *
      * @param winner the uuid of the winner (if one could be selected) - null if not
      */
     public GameEndEvent(UUID[] winner) {
@@ -44,10 +40,10 @@ public sealed class GameEndEvent extends Event permits SingleWinnerGameEndEvent{
     }
 
     public boolean isWinnerPresent() {
-        if(getWinner() == null) {
+        if (getWinner() == null) {
             return false;
         }
-        if(getWinner().length == 0){
+        if (getWinner().length == 0) {
             return false;
         }
         return getWinner()[0] != null;

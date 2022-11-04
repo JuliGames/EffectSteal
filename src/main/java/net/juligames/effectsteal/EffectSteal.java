@@ -49,17 +49,17 @@ public final class EffectSteal extends JavaPlugin {
 
     private boolean sendAdOnEnd = true;
 
-    private DateFormatter dateFormatter = duration ->
+    private final DateFormatter dateFormatter = duration ->
             DurationFormatUtils.formatDurationWords(duration.toMillis(),
                     true, true);
 
-    private Function<EffectMap,UUID[]> winnerGenerator = effectMap1 -> {
+    private Function<EffectMap, UUID[]> winnerGenerator = effectMap1 -> {
 
         final AtomicReference<BasicPair<Integer, UUID>> pair = new AtomicReference<>(new DividedPair<>(Integer.MIN_VALUE, null));
 
         effectMap1.forEach((uuid, myEffects) -> {
             final int val = myEffects.calculateValue();
-            if(val > pair.get().getFirst()) pair.set(new DividedPair<>(val,uuid));
+            if (val > pair.get().getFirst()) pair.set(new DividedPair<>(val, uuid));
         });
         return new UUID[]{pair.get().getSecond()};
     };
@@ -116,12 +116,12 @@ public final class EffectSteal extends JavaPlugin {
         return running;
     }
 
-    public void setSendAdOnEnd(boolean sendAdOnEnd) {
-        this.sendAdOnEnd = sendAdOnEnd;
-    }
-
     public boolean isSendAdOnEnd() {
         return sendAdOnEnd;
+    }
+
+    public void setSendAdOnEnd(boolean sendAdOnEnd) {
+        this.sendAdOnEnd = sendAdOnEnd;
     }
 
     public Function<EffectMap, UUID[]> getWinnerGenerator() {
@@ -149,7 +149,7 @@ public final class EffectSteal extends JavaPlugin {
         EffectStealController controller = new EffectStealController();
         Bukkit.getServer().getServicesManager().register(
                 EffectStealService.class,
-                 controller, this,
+                controller, this,
                 ServicePriority.Normal);
 
         log("registered service....");
@@ -174,7 +174,7 @@ public final class EffectSteal extends JavaPlugin {
         //for timer
         running.subscribe((SubscribableType.QuietSubscription<Boolean>) (subscriptionType, newElement, oldElement) -> {
             if (newElement) {
-                effectStealTimer = new EffectStealTimer(Date.from(Instant.ofEpochMilli(getEndTime())),dateFormatter);
+                effectStealTimer = new EffectStealTimer(Date.from(Instant.ofEpochMilli(getEndTime())), dateFormatter);
                 effectStealTimer.startNew();
             } else {
                 effectStealTimer.chancelAllTasks();
@@ -229,6 +229,7 @@ public final class EffectSteal extends JavaPlugin {
 
     /**
      * this is called to notify EffectSteal that a natural gameEnd has occurred
+     *
      * @apiNote Do not call this!
      */
     @ApiStatus.Internal
@@ -241,9 +242,9 @@ public final class EffectSteal extends JavaPlugin {
 
     public void gameEnd(@Nullable UUID @NotNull [] winnerUUIDs) {
         running.set(false);
-        if(winnerUUIDs != null && winnerUUIDs.length == 1){
+        if (winnerUUIDs != null && winnerUUIDs.length == 1) {
             Bukkit.getPluginManager().callEvent(new SingleWinnerGameEndEvent(winnerUUIDs[0]));
-        }else
+        } else
             Bukkit.getPluginManager().callEvent(new GameEndEvent(winnerUUIDs));
 
         gameEndHandlers.forEach(Runnable::run);

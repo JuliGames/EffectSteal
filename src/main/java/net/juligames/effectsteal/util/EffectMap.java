@@ -27,10 +27,10 @@ public final class EffectMap extends HashMap<UUID, EffectArrayList> {
         EffectArrayList effectArrayList = get(uuid);
 
         if (calculateValue <= -1) {
-            MyEffect oneRandom = effectArrayList.getOneRandom(EffectType.BAD,true);
+            MyEffect oneRandom = effectArrayList.getOneRandom(EffectType.BAD, true);
             MyEffect myEffect = (oneRandom != null ? oneRandom : new UnknownEffect());
             //fire event
-            Bukkit.getPluginManager().callEvent(new EffectStealActionEvent(uuid,myEffect, EffectStealActionEvent.ActionType.PLUS));
+            Bukkit.getPluginManager().callEvent(new EffectStealActionEvent(uuid, myEffect, EffectStealActionEvent.ActionType.PLUS));
             effectArrayList.remove(myEffect);
         } else if (calculateValue >= 0) {
             effectArrayList.add(GoodMyEffect.values()[0].getOneNewRandom(effectArrayList.toArray(new MyEffect[0])));
@@ -42,10 +42,10 @@ public final class EffectMap extends HashMap<UUID, EffectArrayList> {
         EffectArrayList effectArrayList = get(uuid);
 
         if (calculateValue >= 1) {
-            MyEffect oneRandom = effectArrayList.getOneRandom(EffectType.GOOD,true);
+            MyEffect oneRandom = effectArrayList.getOneRandom(EffectType.GOOD, true);
             MyEffect myEffect = (oneRandom != null ? oneRandom : new UnknownEffect());
             //fire Event
-            Bukkit.getPluginManager().callEvent(new EffectStealActionEvent(uuid,myEffect, EffectStealActionEvent.ActionType.MINUS));
+            Bukkit.getPluginManager().callEvent(new EffectStealActionEvent(uuid, myEffect, EffectStealActionEvent.ActionType.MINUS));
             effectArrayList.remove(myEffect);
         } else if (calculateValue <= 0) {
             effectArrayList.add(BadMyEffect.values()[0].getOneNewRandom(effectArrayList.toArray(new MyEffect[0])));
@@ -53,7 +53,7 @@ public final class EffectMap extends HashMap<UUID, EffectArrayList> {
     }
 
 
-    protected int calculateValue(UUID uuid) {
+    private int calculateValue(UUID uuid) {
         return get(uuid).calculateValue();
     }
 

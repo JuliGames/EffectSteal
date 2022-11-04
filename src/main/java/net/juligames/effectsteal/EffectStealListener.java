@@ -1,10 +1,8 @@
 package net.juligames.effectsteal;
 
 import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
-import net.juligames.effectsteal.event.GameEndEvent;
 import net.juligames.effectsteal.event.TimerTickEvent;
 import net.juligames.effectsteal.util.EffectArrayList;
-import net.juligames.effectsteal.util.EffectStealTimer;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -34,7 +32,7 @@ public final class EffectStealListener implements Listener {
 
     @EventHandler
     public void onKill(@NotNull PlayerDeathEvent deathEvent) {
-        if(EffectSteal.get().isRunning()) {
+        if (EffectSteal.get().isRunning()) {
             Player player = deathEvent.getPlayer();
             Player killer = player.getKiller();
             if (killer == null) {
@@ -49,7 +47,7 @@ public final class EffectStealListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onRespawn(@NotNull PlayerPostRespawnEvent respawnEvent) {
-        if(EffectSteal.get().isRunning()) {
+        if (EffectSteal.get().isRunning()) {
             Player player = respawnEvent.getPlayer();
             Collection<PotionEffect> effects = emap.get(player.getUniqueId());
             if (effects != null && effects.size() != 0)
@@ -59,10 +57,9 @@ public final class EffectStealListener implements Listener {
 
     @EventHandler
     public void onEffect(@NotNull EntityPotionEffectEvent event) {
-        if(EffectSteal.get().isRunning()) {
+        if (EffectSteal.get().isRunning()) {
             Entity entity = event.getEntity();
-            if (entity instanceof Player) {
-                Player player = (Player) entity;
+            if (entity instanceof Player player) {
 
                 EffectArrayList myEffects = EffectSteal.get().getEffectMap().get(player.getUniqueId());
                 if (myEffects == null) {
@@ -88,7 +85,8 @@ public final class EffectStealListener implements Listener {
             }
 
           */
-            } else return;
+            } else {
+            }
         }
     }
 
@@ -96,7 +94,7 @@ public final class EffectStealListener implements Listener {
     @Contract(pure = true)
     @EventHandler
     public void onMilk(@NotNull PlayerInteractEvent event) {
-        if(EffectSteal.get().isRunning()) {
+        if (EffectSteal.get().isRunning()) {
             if (event.getMaterial().equals(Material.MILK_BUCKET)) {
                 if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)
                         || event.getAction().equals(Action.RIGHT_CLICK_AIR)) {
@@ -112,16 +110,10 @@ public final class EffectStealListener implements Listener {
 
     @EventHandler
     public void onTimerTick(@NotNull TimerTickEvent timerTickEvent) {
-        if(timerTickEvent.between().isZero() || timerTickEvent.between().isNegative()) {
+        if (timerTickEvent.between().isZero() || timerTickEvent.between().isNegative()) {
             //notify gameEnd
             EffectSteal.get().notifyGameEnd();
         }
     }
-
-    @EventHandler
-    public void winner(GameEndEvent gameEndEvent){
-        int anzahlDerGewinner = gameEndEvent.getWinnerCount();
-    }
-
 
 }

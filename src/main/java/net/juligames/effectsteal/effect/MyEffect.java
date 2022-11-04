@@ -35,8 +35,13 @@ public interface MyEffect {
         player.playSound(player.getLocation(), removalSound(), 100, 0);
     }
 
-    default void revoke(@NotNull Player player) {revoke(player,false);}
-    default void grant(@NotNull Player player) {grant(player, false);}
+    default void revoke(@NotNull Player player) {
+        revoke(player, false);
+    }
+
+    default void grant(@NotNull Player player) {
+        grant(player, false);
+    }
 
 
     default Sound additionSound() {
@@ -81,7 +86,10 @@ public interface MyEffect {
             for (MyEffect dependency : dependencies) {
                 boolean b = false;
                 for (MyEffect effect : current) {
-                    if (effect.equals(dependency)) b = true;
+                    if (effect.equals(dependency)) {
+                        b = true;
+                        break;
+                    }
                 }
                 if (!b) {
                     next = true;
@@ -97,7 +105,6 @@ public interface MyEffect {
     }
 
     /**
-     *
      * @param myEffect The effect to check similarity on
      * @return if this and myEffect share the same PotionEffectType
      */

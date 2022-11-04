@@ -15,7 +15,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.security.InvalidParameterException;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Random;
 
 
 public class EffectArrayList extends SubscribableList<MyEffect> {
@@ -83,7 +86,7 @@ public class EffectArrayList extends SubscribableList<MyEffect> {
                 return;
             }
             effect.revoke(player);
-            getSimilar(effect).forEach(myEffect -> myEffect.grant(player,true));
+            getSimilar(effect).forEach(myEffect -> myEffect.grant(player, true));
             Color color = effect.getType().getColor();
             TextComponent component = Component.text(effect.getType().getName() + ", " + (effect.getLevel() + 1) + " was removed!")
                     .color(TextColor.color(color.getRed(), color.getGreen(), color.getBlue()));
@@ -127,13 +130,12 @@ public class EffectArrayList extends SubscribableList<MyEffect> {
 
 
     /**
-     *
      * @return all MyEffects in this List that share the PotionEffectType with the given effect!
      */
     public Collection<MyEffect> getSimilar(MyEffect effect) {
         Collection<MyEffect> collection = new ArrayList<>();
         for (MyEffect myEffect : this) {
-            if(myEffect.isSimilar(effect)) {
+            if (myEffect.isSimilar(effect)) {
                 collection.add(myEffect);
             }
         }
@@ -143,18 +145,19 @@ public class EffectArrayList extends SubscribableList<MyEffect> {
 
     /**
      * @param myEffect the effect
-     * @param save if set to true the myEffect needs to be part of this list!
+     * @param save     if set to true the myEffect needs to be part of this list!
      * @return all MyEffects in this List that depend on a given MyEffect
      */
     public Collection<MyEffect> getDependent(MyEffect myEffect, boolean save) {
-        if(save) {
-            if(!contains(myEffect)) throw new InvalidParameterException("myEffect is not contained in this list! Set save = false to run anyway!");
+        if (save) {
+            if (!contains(myEffect))
+                throw new InvalidParameterException("myEffect is not contained in this list! Set save = false to run anyway!");
         }
         Collection<MyEffect> collection = new ArrayList<>();
         for (MyEffect effect : this) {
-            if(effect.hasDependencies()) {
+            if (effect.hasDependencies()) {
                 for (MyEffect dependency : effect.getDependencies()) {
-                    if(dependency.equals(myEffect)) {
+                    if (dependency.equals(myEffect)) {
                         //dependent for myEffect found!!!
                         collection.add(effect);
                     }
@@ -165,11 +168,10 @@ public class EffectArrayList extends SubscribableList<MyEffect> {
     }
 
 
-
     //Standby
     @Nullable
     public MyEffect getOneRandom(EffectType effectType, boolean forRemoval) {
-        return getRandomFromList(effectType,this,true);
+        return getRandomFromList(effectType, this, true);
     }
 
     protected MyEffect getRandomFromList(EffectType effectType, ArrayList<MyEffect> myEffects, boolean forRemoval) {
@@ -179,14 +181,14 @@ public class EffectArrayList extends SubscribableList<MyEffect> {
             MyEffect myEffect = myEffects.get(rnd);
 
             if (myEffect.getEffectType().equals(effectType)) {
-                if(!forRemoval) {
+                if (!forRemoval) {
                     return myEffect;
-                }else {
+                } else {
                     Collection<MyEffect> dependent = getDependent(myEffect, true);
-                    if(dependent.size() == 0) {
+                    if (dependent.size() == 0) {
                         return myEffect;
-                    }else {
-                        return getRandomFromList(effectType,new ArrayList<>(dependent), forRemoval);
+                    } else {
+                        return getRandomFromList(effectType, new ArrayList<>(dependent), forRemoval);
                     }
                 }
             }
@@ -194,9 +196,9 @@ public class EffectArrayList extends SubscribableList<MyEffect> {
         return null;
     }
 
-  @Nullable
+    @Nullable
     public MyEffect getOneRandom(EffectType effectType) {
-        return getOneRandom(effectType,false);
+        return getOneRandom(effectType, false);
     }
 
 

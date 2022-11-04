@@ -1,6 +1,5 @@
 package net.juligames.effectsteal.event;
 
-import jdk.incubator.foreign.ResourceScope;
 import net.juligames.effectsteal.util.EffectArrayList;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.event.HandlerList;
@@ -13,7 +12,7 @@ import java.util.UUID;
  * @author Ture Bentzin
  * 04.11.2022
  */
-public final class SingleWinnerGameEndEvent extends GameEndEvent{
+public final class SingleWinnerGameEndEvent extends GameEndEvent {
 
     public static HandlerList handlerList = new HandlerList();
 

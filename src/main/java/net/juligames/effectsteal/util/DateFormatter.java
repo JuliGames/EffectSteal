@@ -8,5 +8,5 @@ import java.util.function.Function;
  * 30.10.2022
  */
 @FunctionalInterface
-public interface DateFormatter extends Function<Duration,String>{
+public interface DateFormatter extends Function<Duration, String> {
 }

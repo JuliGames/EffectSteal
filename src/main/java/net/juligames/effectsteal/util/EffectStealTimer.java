@@ -14,9 +14,22 @@ import java.util.Date;
  * @author Ture Bentzin
  * 30.10.2022
  */
-public class EffectStealTimer{
+public class EffectStealTimer {
     private final Date endDate;
     private final DateFormatter dateFormatter;
+    private final Runnable runnable = () -> {
+        Instant now = Instant.now();
+        Duration between = Duration.between(now, getEndDate().toInstant());
+        String apply = getDateFormatter().apply(between);
+        String mm = "<blue>Time remaining: <yellow>" + apply;
+        TimerTickEvent timerTickEvent = new TimerTickEvent(now, getEndDate(), mm);
+        Bukkit.getPluginManager().callEvent(timerTickEvent);
+
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            player.sendActionBar(timerTickEvent.getActionBarAsComponent());
+            //System.out.println("timer: " + apply );
+        });
+    };
 
     public EffectStealTimer(Date endDate, DateFormatter dateFormatter) {
         this.endDate = endDate;
@@ -35,7 +48,7 @@ public class EffectStealTimer{
         return Bukkit.getScheduler().runTaskTimer(
                 EffectSteal.get(),
                 runnable,
-                0,20);
+                0, 20);
     }
 
     /**
@@ -43,24 +56,9 @@ public class EffectStealTimer{
      */
     public final void chancelAllTasks() {
         for (BukkitTask pendingTask : Bukkit.getScheduler().getPendingTasks()) {
-            if(pendingTask.getOwner().equals(EffectSteal.get())) {
+            if (pendingTask.getOwner().equals(EffectSteal.get())) {
                 pendingTask.cancel();
             }
         }
     }
-
-
-    private final Runnable runnable = () -> {
-        Instant now = Instant.now();
-        Duration between = Duration.between(now, getEndDate().toInstant());
-        String apply = getDateFormatter().apply(between);
-        String mm = "<blue>Time remaining: <yellow>" + apply;
-        TimerTickEvent timerTickEvent = new TimerTickEvent(now, getEndDate(), mm);
-        Bukkit.getPluginManager().callEvent(timerTickEvent);
-
-        Bukkit.getOnlinePlayers().forEach(player -> {
-            player.sendActionBar(timerTickEvent.getActionBarAsComponent());
-            //System.out.println("timer: " + apply );
-        });
-    };
 }

@@ -25,7 +25,6 @@ public class EffectStealController implements EffectStealService {
     private DateFormatter dateFormatter = duration ->
             DurationFormatUtils.formatDurationWords(duration.toMillis(),
                     true, true);
-    ;
 
 
     /**
@@ -33,9 +32,9 @@ public class EffectStealController implements EffectStealService {
      *
      * @param endTime    when the game should be stopped (in unix timemilis)
      * @param afterStart
-     * @deprecated afterStart is no longer necessary {@link net.juligames.effectsteal.event.GameStartEvent}
      * @implNote same as {@link EffectStealService#startNewGame(long)} but afterStart will be executed after start procedure
      * but before the game is running
+     * @deprecated afterStart is no longer necessary {@link net.juligames.effectsteal.event.GameStartEvent}
      */
     @Override
     @Deprecated

@@ -8,11 +8,10 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author Ture Bentzin
  * 04.11.2022
- *
  * @apiNote currently not in use, maybe put into use later
  */
 @Experimental
-public final class CustomGameKilledEvent extends GameKilledEvent{
+public final class CustomGameKilledEvent extends GameKilledEvent {
 
     public static HandlerList handlerList = new HandlerList();
 

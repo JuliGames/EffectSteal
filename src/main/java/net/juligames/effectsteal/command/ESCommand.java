@@ -1,8 +1,6 @@
 package net.juligames.effectsteal.command;
 
 import net.juligames.effectsteal.EffectSteal;
-import net.kyori.adventure.key.Key;
-import net.kyori.adventure.pointer.Pointer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -26,11 +24,10 @@ public class ESCommand implements CommandExecutor {
                              @NotNull Command command, @NotNull String label,
                              @NotNull String[] args) {
         if (EffectSteal.hasPluginOpPermissions(sender)) {
-            if (sender instanceof Player) {
+            if (sender instanceof Player player) {
                 if (args.length == 0) {
                     sender.sendMessage(MOTP);
                 }
-                Player player = (Player) sender;
                 if (args.length >= 1) {
                     String a = args[0];
                     if (a.equalsIgnoreCase("reset")) {

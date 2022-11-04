@@ -5,7 +5,6 @@ import de.bentzin.tools.register.Registerator;
 import net.juligames.effectsteal.EffectSteal;
 import net.juligames.effectsteal.util.DateFormatter;
 import net.juligames.effectsteal.util.EffectMap;
-import net.juligames.effectsteal.util.EffectStealTimer;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
@@ -89,6 +88,7 @@ public interface EffectStealService {
 
     /**
      * Add a runnable that will be run when the game ends (timer runs out or the game gets killed)
+     *
      * @param handler the action to perform
      */
     void addGameEndHandler(Runnable handler);
@@ -131,7 +131,6 @@ public interface EffectStealService {
     }
 
     /**
-     *
      * @return Registerator for gameEnd - add new Runnable here to execute code on the end of the game
      * @deprecated duo to {@link net.juligames.effectsteal.event.GameEndEvent} & {@link net.juligames.effectsteal.event.GameKilledEvent}
      */
@@ -143,6 +142,8 @@ public interface EffectStealService {
     //date formatter
     DateFormatter getDateFormatter();
 
+    void setDateFormatter(DateFormatter dateFormatter);
+
     /**
      * The Function to identify who has won a game
      */
@@ -152,6 +153,4 @@ public interface EffectStealService {
      * The Function to identify who has won a game
      */
     void setWinnerGenerator(Function<EffectMap, UUID[]> winnerGenerator);
-
-    void setDateFormatter(DateFormatter dateFormatter);
 }

@@ -23,20 +23,19 @@ public final class TimerTickEvent extends Event {
     private final Date endDate;
 
     @NotNull
-    private  String actionBarMiniMessage;
+    private String actionBarMiniMessage;
 
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
-
-    public TimerTickEvent(@NotNull Instant now, @NotNull Date endDate, @NotNull String actionBarMiniMessage){
+    public TimerTickEvent(@NotNull Instant now, @NotNull Date endDate, @NotNull String actionBarMiniMessage) {
         this.now = now;
         this.endDate = endDate;
         this.actionBarMiniMessage = actionBarMiniMessage;
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     /**
-     *
      * @return duration between now and the end of the timer
      */
     public Duration between() {
@@ -44,7 +43,6 @@ public final class TimerTickEvent extends Event {
     }
 
     /**
-     *
      * @return the date the timer estimates to run out
      */
     public @NotNull Date getEndDate() {
@@ -52,7 +50,6 @@ public final class TimerTickEvent extends Event {
     }
 
     /**
-     *
      * @return the point in time the timer estimates to run out
      */
     public Instant getEndInstant() {
@@ -60,7 +57,6 @@ public final class TimerTickEvent extends Event {
     }
 
     /**
-     *
      * @return the point in time the event is assigned to
      */
     public @NotNull Instant getNow() {
@@ -69,8 +65,7 @@ public final class TimerTickEvent extends Event {
 
 
     /**
-     *
-     * @return  new message that will be displayed in every players hotbar as minimessage
+     * @return new message that will be displayed in every players hotbar as minimessage
      * @see MiniMessage
      */
     public @NotNull String getActionBarMiniMessage() {
@@ -78,7 +73,6 @@ public final class TimerTickEvent extends Event {
     }
 
     /**
-     *
      * @param actionBarMiniMessage new message that will be displayed in every players hotbar as minimessage
      * @see MiniMessage
      */
@@ -87,7 +81,6 @@ public final class TimerTickEvent extends Event {
     }
 
     /**
-     *
      * @return the message that will be displayed in every players hotbar
      */
     public @NotNull Component getActionBarAsComponent() {
@@ -101,11 +94,10 @@ public final class TimerTickEvent extends Event {
 
     @Override
     public @NotNull String toString() {
-        final StringBuffer sb = new StringBuffer("TimerTickEvent{");
-        sb.append("now=").append(now);
-        sb.append(", endDate=").append(endDate.toInstant());
-        sb.append(", actionBarMiniMessage='").append(actionBarMiniMessage).append('\'');
-        sb.append('}');
-        return sb.toString();
+        String sb = "TimerTickEvent{" + "now=" + now +
+                ", endDate=" + endDate.toInstant() +
+                ", actionBarMiniMessage='" + actionBarMiniMessage + '\'' +
+                '}';
+        return sb;
     }
 }
