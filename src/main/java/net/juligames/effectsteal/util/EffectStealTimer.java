@@ -52,7 +52,8 @@ public class EffectStealTimer{
 
     private final Runnable runnable = () -> {
         Instant now = Instant.now();
-        String apply = getDateFormatter().apply(Duration.between(now, getEndDate().toInstant()));
+        Duration between = Duration.between(now, getEndDate().toInstant());
+        String apply = getDateFormatter().apply(between);
         String mm = "<blue>Time remaining: <yellow>" + apply;
         TimerTickEvent timerTickEvent = new TimerTickEvent(now, getEndDate(), mm);
         Bukkit.getPluginManager().callEvent(timerTickEvent);

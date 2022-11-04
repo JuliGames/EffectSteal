@@ -1,10 +1,14 @@
 package net.juligames.effectsteal;
 
+import com.google.errorprone.annotations.DoNotCall;
 import de.bentzin.tools.misc.SubscribableType;
+import de.bentzin.tools.pair.BasicPair;
+import de.bentzin.tools.pair.DividedPair;
 import de.bentzin.tools.register.Registerator;
 import net.juligames.effectsteal.command.ESCommand;
 import net.juligames.effectsteal.event.GameEndEvent;
 import net.juligames.effectsteal.event.GameKilledEvent;
+import net.juligames.effectsteal.event.SingleWinnerGameEndEvent;
 import net.juligames.effectsteal.service.EffectStealController;
 import net.juligames.effectsteal.service.EffectStealService;
 import net.juligames.effectsteal.util.DateFormatter;
@@ -21,12 +25,16 @@ import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.Instant;
 import java.util.Date;
 import java.util.Objects;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
 import java.util.logging.Level;
 
 public final class EffectSteal extends JavaPlugin {
@@ -39,9 +47,22 @@ public final class EffectSteal extends JavaPlugin {
     private final SubscribableType<Boolean> running = new SubscribableType<>(false);
     private final Registerator<Runnable> gameEndHandlers = new Registerator<>();
 
+    private boolean sendAdOnEnd = true;
+
     private DateFormatter dateFormatter = duration ->
             DurationFormatUtils.formatDurationWords(duration.toMillis(),
                     true, true);
+
+    private Function<EffectMap,UUID[]> winnerGenerator = effectMap1 -> {
+
+        final AtomicReference<BasicPair<Integer, UUID>> pair = new AtomicReference<>(new DividedPair<>(Integer.MIN_VALUE, null));
+
+        effectMap1.forEach((uuid, myEffects) -> {
+            final int val = myEffects.calculateValue();
+            if(val > pair.get().getFirst()) pair.set(new DividedPair<>(val,uuid));
+        });
+        return new UUID[]{pair.get().getSecond()};
+    };
 
     private EffectStealTimer effectStealTimer = null;
     private long startTime = -1L;
@@ -93,6 +114,22 @@ public final class EffectSteal extends JavaPlugin {
 
     public SubscribableType<Boolean> getRunning() {
         return running;
+    }
+
+    public void setSendAdOnEnd(boolean sendAdOnEnd) {
+        this.sendAdOnEnd = sendAdOnEnd;
+    }
+
+    public boolean isSendAdOnEnd() {
+        return sendAdOnEnd;
+    }
+
+    public Function<EffectMap, UUID[]> getWinnerGenerator() {
+        return winnerGenerator;
+    }
+
+    public void setWinnerGenerator(Function<EffectMap, UUID[]> winnerGenerator) {
+        this.winnerGenerator = winnerGenerator;
     }
 
     @Nullable
@@ -190,21 +227,41 @@ public final class EffectSteal extends JavaPlugin {
         getEffectMap().plus(killer.getUniqueId());
     }
 
-    public void gameEnd() {
-        Bukkit.getPluginManager().callEvent(new GameEndEvent());
+    /**
+     * this is called to notify EffectSteal that a natural gameEnd has occurred
+     * @apiNote Do not call this!
+     */
+    @ApiStatus.Internal
+    @DoNotCall
+    public void notifyGameEnd() {
+        broadCast("<yellow> DEBUG: GameEnd notification");
+        gameEnd(winnerGenerator.apply(effectMap));
+        effectStealTimer.chancelAllTasks();
+    }
+
+    public void gameEnd(@Nullable UUID @NotNull [] winnerUUIDs) {
+        running.set(false);
+        if(winnerUUIDs != null && winnerUUIDs.length == 1){
+            Bukkit.getPluginManager().callEvent(new SingleWinnerGameEndEvent(winnerUUIDs[0]));
+        }else
+            Bukkit.getPluginManager().callEvent(new GameEndEvent(winnerUUIDs));
+
         gameEndHandlers.forEach(Runnable::run);
+        //ad
+
+        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+            onlinePlayer.sendActionBar(MiniMessage.miniMessage().deserialize("<gray>[<red>Effect<yellow>Steal</yellow></red>]</gray> <gold> by <blue> Ture Bentzin"));
+        }
     }
 
     public void killGame(Component reason) {
-        //1. set running false
-        running.set(false);
-
         //gameEnd routine
-        Bukkit.getPluginManager().callEvent(new GameKilledEvent(reason));
-        gameEnd();
+        GameKilledEvent event = new GameKilledEvent(reason);
+        Bukkit.getPluginManager().callEvent(event);
+        gameEnd(null);
 
         //2. kick
-        Bukkit.getOnlinePlayers().forEach(player -> player.kick(reason));
+        Bukkit.getOnlinePlayers().forEach(player -> player.kick(event.getReason()));
     }
 
 }

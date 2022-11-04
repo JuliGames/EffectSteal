@@ -11,7 +11,7 @@ import javax.script.Compilable;
  * @author Ture Bentzin
  * 01.11.2022
  */
-public final class GameKilledEvent extends Event {
+public sealed class GameKilledEvent extends Event permits CustomGameKilledEvent{
 
     private static HandlerList handlerList = new HandlerList();
     private final Component reason;

@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
 import java.util.UUID;
+import java.util.function.Function;
 
 /**
  * @author Ture Bentzin
@@ -141,6 +142,16 @@ public interface EffectStealService {
 
     //date formatter
     DateFormatter getDateFormatter();
+
+    /**
+     * The Function to identify who has won a game
+     */
+    Function<EffectMap, UUID[]> getWinnerGenerator();
+
+    /**
+     * The Function to identify who has won a game
+     */
+    void setWinnerGenerator(Function<EffectMap, UUID[]> winnerGenerator);
 
     void setDateFormatter(DateFormatter dateFormatter);
 }

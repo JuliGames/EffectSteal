@@ -1,7 +1,9 @@
 package net.juligames.effectsteal;
 
 import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
+import net.juligames.effectsteal.event.TimerTickEvent;
 import net.juligames.effectsteal.util.EffectArrayList;
+import net.juligames.effectsteal.util.EffectStealTimer;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -101,6 +103,17 @@ public final class EffectStealListener implements Listener {
                 }
             }
 
+        }
+    }
+
+
+    //internal
+
+    @EventHandler
+    public void onTimerTick(@NotNull TimerTickEvent timerTickEvent) {
+        if(timerTickEvent.between().isZero() || timerTickEvent.between().isNegative()) {
+            //notify gameEnd
+            EffectSteal.get().notifyGameEnd();
         }
     }
 

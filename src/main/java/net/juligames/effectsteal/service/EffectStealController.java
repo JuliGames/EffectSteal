@@ -13,6 +13,9 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
+import java.util.UUID;
+import java.util.function.Function;
+
 /**
  * @author Ture Bentzin
  * 29.10.2022
@@ -143,6 +146,20 @@ public class EffectStealController implements EffectStealService {
     @Override
     public void setDateFormatter(DateFormatter dateFormatter) {
         this.dateFormatter = dateFormatter;
+    }
+
+    /**
+     * The Function to identify who has won a game
+     */
+    public Function<EffectMap, UUID[]> getWinnerGenerator() {
+        return EffectSteal.get().getWinnerGenerator();
+    }
+
+    /**
+     * The Function to identify who has won a game
+     */
+    public void setWinnerGenerator(Function<EffectMap, UUID[]> winnerGenerator) {
+        EffectSteal.get().setWinnerGenerator(winnerGenerator);
     }
 
     @Override
