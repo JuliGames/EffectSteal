@@ -11,6 +11,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Range;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +36,11 @@ public sealed class GameEndEvent extends Event permits SingleWinnerGameEndEvent{
 
     public UUID[] getWinner() {
         return winner;
+    }
+
+
+    public @Range(from = 0, to = Integer.MAX_VALUE) int getWinnerCount() {
+        return winner.length;
     }
 
     public boolean isWinnerPresent() {

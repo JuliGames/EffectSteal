@@ -1,6 +1,7 @@
 package net.juligames.effectsteal;
 
 import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
+import net.juligames.effectsteal.event.GameEndEvent;
 import net.juligames.effectsteal.event.TimerTickEvent;
 import net.juligames.effectsteal.util.EffectArrayList;
 import net.juligames.effectsteal.util.EffectStealTimer;
@@ -115,6 +116,11 @@ public final class EffectStealListener implements Listener {
             //notify gameEnd
             EffectSteal.get().notifyGameEnd();
         }
+    }
+
+    @EventHandler
+    public void winner(GameEndEvent gameEndEvent){
+        int anzahlDerGewinner = gameEndEvent.getWinnerCount();
     }
 
 
