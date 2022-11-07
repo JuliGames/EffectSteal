@@ -19,7 +19,7 @@ import java.util.Date;
 public final class DefinedTimerTickEvent extends TimerTickEvent {
 
 
-    private final HandlerList handlerList = new HandlerList();
+    private static final HandlerList handlerList = new HandlerList();
 
     private final EffectStealTimer timer;
 

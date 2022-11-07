@@ -14,7 +14,7 @@ import java.util.UUID;
  */
 public final class SingleWinnerGameEndEvent extends GameEndEvent {
 
-    public static HandlerList handlerList = new HandlerList();
+    private static final HandlerList handlerList = new HandlerList();
 
 
     public SingleWinnerGameEndEvent(UUID winner) {

@@ -15,7 +15,8 @@ import java.util.Date;
  * 07.11.2022
  */
 public sealed class TimerTickEvent extends Event permits DefinedTimerTickEvent {
-    private static final HandlerList handlers = new HandlerList();
+    private static final HandlerList handlerList = new HandlerList();
+
     @NotNull
     protected final Instant now;
     @NotNull
@@ -31,7 +32,7 @@ public sealed class TimerTickEvent extends Event permits DefinedTimerTickEvent {
     }
 
     public static HandlerList getHandlerList() {
-        return handlers;
+        return  handlerList;
     }
 
     /**
@@ -87,7 +88,7 @@ public sealed class TimerTickEvent extends Event permits DefinedTimerTickEvent {
 
     @Override
     public @NotNull HandlerList getHandlers() {
-        return handlers;
+        return handlerList;
     }
 
     /**
