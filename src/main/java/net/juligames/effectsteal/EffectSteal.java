@@ -6,6 +6,7 @@ import de.bentzin.tools.pair.BasicPair;
 import de.bentzin.tools.pair.DividedPair;
 import de.bentzin.tools.register.Registerator;
 import net.juligames.effectsteal.command.ESCommand;
+import net.juligames.effectsteal.event.DefinedTimerTickEvent;
 import net.juligames.effectsteal.event.GameEndEvent;
 import net.juligames.effectsteal.event.GameKilledEvent;
 import net.juligames.effectsteal.event.SingleWinnerGameEndEvent;
@@ -37,6 +38,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.logging.Level;
 
+@SuppressWarnings("unused")
 public final class EffectSteal extends JavaPlugin {
 
     @UnknownInitialization
@@ -102,6 +104,7 @@ public final class EffectSteal extends JavaPlugin {
     public Registerator<Runnable> getGameEndHandlers() {
         return gameEndHandlers;
     }
+
 
     @Nullable
     public RegisteredServiceProvider<EffectStealService> serviceProvider() {

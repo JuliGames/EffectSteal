@@ -24,15 +24,26 @@ public interface MyEffect {
         return getDependencies().length != 0;
     }
 
+    /**
+     *
+     * @param player player this should be granted to
+     * @param silent if the sound should be muted or not
+     */
     default void grant(@NotNull Player player, boolean silent) {
         player.addPotionEffect(new PotionEffect(getType(), Integer.MAX_VALUE, getLevel()));
-        player.playSound(player.getLocation(), additionSound(), 100, 0);
+        if(!silent)
+            player.playSound(player.getLocation(), additionSound(), 100, 0);
     }
 
+    /**
+     *
+     * @param player player this should be revoked from
+     * @param silent if the sound should be muted or not
+     */
     default void revoke(@NotNull Player player, boolean silent) {
         player.removePotionEffect(getType());//TODO removes every effect
-
-        player.playSound(player.getLocation(), removalSound(), 100, 0);
+        if(!silent)
+            player.playSound(player.getLocation(), removalSound(), 100, 0);
     }
 
     default void revoke(@NotNull Player player) {

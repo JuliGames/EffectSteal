@@ -18,6 +18,7 @@ import java.util.UUID;
  * @author Ture Bentzin
  * 01.11.2022
  */
+@SuppressWarnings("unused")
 public sealed class GameEndEvent extends Event permits SingleWinnerGameEndEvent {
 
     private static final HandlerList handlerList = new HandlerList();

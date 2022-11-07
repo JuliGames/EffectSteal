@@ -1,6 +1,7 @@
 package net.juligames.effectsteal.util;
 
 import net.juligames.effectsteal.EffectSteal;
+import net.juligames.effectsteal.event.DefinedTimerTickEvent;
 import net.juligames.effectsteal.event.TimerTickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
@@ -14,6 +15,7 @@ import java.util.Date;
  * @author Ture Bentzin
  * 30.10.2022
  */
+@SuppressWarnings("UnusedReturnValue")
 public class EffectStealTimer {
     private final Date endDate;
     private final DateFormatter dateFormatter;
@@ -22,7 +24,7 @@ public class EffectStealTimer {
         Duration between = Duration.between(now, getEndDate().toInstant());
         String apply = getDateFormatter().apply(between);
         String mm = "<blue>Time remaining: <yellow>" + apply;
-        TimerTickEvent timerTickEvent = new TimerTickEvent(now, getEndDate(), mm);
+        TimerTickEvent timerTickEvent = new DefinedTimerTickEvent(now, getEndDate(), mm , this);
         Bukkit.getPluginManager().callEvent(timerTickEvent);
 
         Bukkit.getOnlinePlayers().forEach(player -> {
@@ -45,7 +47,7 @@ public class EffectStealTimer {
     }
 
     public final @NotNull BukkitTask startNew() {
-        return Bukkit.getScheduler().runTaskTimer(
+        return Bukkit.getScheduler().runTaskTimerAsynchronously(
                 EffectSteal.get(),
                 runnable,
                 0, 20);

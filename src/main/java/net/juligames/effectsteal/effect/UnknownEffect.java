@@ -31,6 +31,7 @@ public class UnknownEffect implements MyEffect {
     }
 
 
+    @SuppressWarnings("SameReturnValue")
     public Sound failSound() {
         return Sound.BLOCK_ANVIL_FALL;
     }

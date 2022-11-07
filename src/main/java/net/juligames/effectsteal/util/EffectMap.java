@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.UUID;
 
+@SuppressWarnings("UnusedReturnValue")
 public final class EffectMap extends HashMap<UUID, EffectArrayList> {
 
     /**

@@ -12,20 +12,19 @@ import java.util.Date;
 
 /**
  * @author Ture Bentzin
- * 01.11.2022
+ * 07.11.2022
  */
-public final class TimerTickEvent extends Event {
-
+public sealed class TimerTickEvent extends Event permits DefinedTimerTickEvent {
     private static final HandlerList handlers = new HandlerList();
     @NotNull
-    private final Instant now;
+    protected final Instant now;
     @NotNull
-    private final Date endDate;
-
+    protected final Date endDate;
     @NotNull
-    private String actionBarMiniMessage;
+    protected String actionBarMiniMessage;
 
     public TimerTickEvent(@NotNull Instant now, @NotNull Date endDate, @NotNull String actionBarMiniMessage) {
+        super(true);
         this.now = now;
         this.endDate = endDate;
         this.actionBarMiniMessage = actionBarMiniMessage;
@@ -63,7 +62,6 @@ public final class TimerTickEvent extends Event {
         return now;
     }
 
-
     /**
      * @return new message that will be displayed in every players hotbar as minimessage
      * @see MiniMessage
@@ -92,12 +90,18 @@ public final class TimerTickEvent extends Event {
         return handlers;
     }
 
+    /**
+     * @return if this is a {@link DefinedTimerTickEvent} or not
+     */
+    public boolean isDefined() {
+        return false;
+    }
+
     @Override
     public @NotNull String toString() {
-        String sb = "TimerTickEvent{" + "now=" + now +
+        return "TimerTickEvent{" + "now=" + now +
                 ", endDate=" + endDate.toInstant() +
                 ", actionBarMiniMessage='" + actionBarMiniMessage + '\'' +
                 '}';
-        return sb;
     }
 }

@@ -31,6 +31,6 @@ public final class SingleWinnerGameEndEvent extends GameEndEvent {
 
     @Override
     public @NotNull HandlerList getHandlers() {
-        return super.getHandlers();
+        return handlerList;
     }
 }

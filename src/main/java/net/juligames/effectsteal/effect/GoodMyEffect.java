@@ -90,7 +90,7 @@ public enum GoodMyEffect implements MyEffect {
     }
 
     @Override
-    public PotionEffectType getType() {
+    public @NotNull PotionEffectType getType() {
         return type;
     }
 

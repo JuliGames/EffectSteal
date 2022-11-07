@@ -59,7 +59,8 @@ public final class EffectStealListener implements Listener {
     public void onEffect(@NotNull EntityPotionEffectEvent event) {
         if (EffectSteal.get().isRunning()) {
             Entity entity = event.getEntity();
-            if (entity instanceof Player player) {
+            if (entity instanceof Player player) //noinspection CommentedOutCode
+            {
 
                 EffectArrayList myEffects = EffectSteal.get().getEffectMap().get(player.getUniqueId());
                 if (myEffects == null) {
@@ -112,7 +113,9 @@ public final class EffectStealListener implements Listener {
     public void onTimerTick(@NotNull TimerTickEvent timerTickEvent) {
         if (timerTickEvent.between().isZero() || timerTickEvent.between().isNegative()) {
             //notify gameEnd
-            EffectSteal.get().notifyGameEnd();
+            if(EffectSteal.get().isRunning())
+                EffectSteal.get().notifyGameEnd();
+            else EffectSteal.get().getLogger().warning("timer is notifying a gameEnd but the game is not running! -> ignoring");
         }
     }
 

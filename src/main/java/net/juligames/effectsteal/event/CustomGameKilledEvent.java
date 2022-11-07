@@ -33,6 +33,6 @@ public final class CustomGameKilledEvent extends GameKilledEvent {
 
     @Override
     public @NotNull HandlerList getHandlers() {
-        return super.getHandlers();
+        return handlerList;
     }
 }
